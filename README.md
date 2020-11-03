@@ -1,4 +1,4 @@
-# Covid: Python Project Template (CPPT?)
+# Rohde & Schwarz Python Instrument Tools (RS_PIT)
 [![Test Status    ](https://travis-ci.org/mclim9/pyTemplate.svg?branch=master)](https://travis-ci.org/github/mclim9/pyTemplate)
 [![PyPI version   ](https://badge.fury.io/py/pyTemplate.svg)](https://pypi.org/project/pyTemplate/)
 ![Coveralls github](https://img.shields.io/coveralls/github/mclim9/pyTemplate)
@@ -6,7 +6,7 @@
 ![Python package  ](https://github.com/mclim9/pyTemplate/workflows/Python%20package/badge.svg)
 
 ## Description
-Set of python tools for Rohde & Schwarz instruments.
+Set of python tools for Rohde & Schwarz instrument control
 
 ## Files
 Directories     | Description
