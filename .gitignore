@@ -1,0 +1,35 @@
+### Build directories
+/dist/
+/build/
+/*.egg-info/
+/proto/
+
+### IQ Waveform/Capture
+*.iqw
+*.rsi
+*.tar
+*.wv
+*.xml
+
+### Administrative
+*.pyc
+*.lnk
+*.code-workspace
+*.bat
+
+### Data files
+*.csv
+*.xls
+*.xlsx
+*.xlsm
+*.pdf
+*.ppt
+*.pptx
+*.json
+*.zip
+
+## Testing Files
+htmlcov
+.coveralls.yml
+test/.coverage
+/*.coverage

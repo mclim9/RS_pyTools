@@ -1,0 +1,5 @@
+## Start of script
+*IDN?
+*OPT?
+SYST:DFPR?
+## End of script
