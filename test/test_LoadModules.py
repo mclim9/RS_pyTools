@@ -1,6 +1,5 @@
-###############################################################################
-### Purpose: Import Library-->Create Object-->Catch obvious typos.
-###############################################################################
+'''Purpose: Import Library-->Create Object-->Catch obvious typos'''
+#pylint: disable=import-outside-toplevel
 import unittest
 import sys
 
