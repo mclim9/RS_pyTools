@@ -31,7 +31,7 @@ class iSocket():
         """Socket Query"""
         self.write(SCPI)
         try:
-            sOut = self.s.recv(2048).strip()    # Read socket
+            sOut = self.s.recv(40000).strip()    # Read socket
             sOut = sOut.decode()
         except socket.error:
             sOut = '<not Read>'

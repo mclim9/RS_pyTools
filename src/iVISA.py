@@ -1,7 +1,7 @@
 '''Rohde & Schwarz Automation for demonstration use.'''
 import xml.etree.ElementTree as ET
 import logging
-import visa                             # Import VISA module
+import pyvisa as visa                                   # Import VISA module
 
 # #############################################################################
 # ## Code Begin
@@ -9,7 +9,7 @@ import visa                             # Import VISA module
 class iVISA():
     """ instrument VISA class """
     def __init__(self):
-        # self.s = socket.socket()                # Create a socket
+        # self.s = socket.socket()                      # Create a socket
         pass
 
     def close(self):
@@ -24,27 +24,27 @@ class iVISA():
             rm = visa.ResourceManager()
             # rmlist = rm.list_resources()
             self.VISA = rm.open_resource(f'TCPIP0::{host}::inst0::INSTR')
-        except:
-            print(f"VISAErr: ")
+        except visa.errors:
+            print(f"VError: {visa.errors}")
         return self
 
     def query(self, SCPI):
         '''VISA query'''
         logging.info(f'Write> {SCPI}')
-        vOut = self.VISA.query(SCPI)            # Query cmd
+        vOut = self.VISA.query(SCPI)                    # Query cmd
         logging.info(f'Read < {vOut.strip()}')
         return vOut.strip()
 
     def write(self, SCPI):
         '''VISA write'''
         logging.info(f'Write> {SCPI}')
-        self.VISA.write(SCPI)                   # Write cmd
+        self.VISA.write(SCPI)                           # Write cmd
 
     def getSysInfo(self):
         '''Get System Info'''
         xmlIn = self.query("SYST:DFPR?")
 
-        xmlIn = xmlIn[xmlIn.find('>') + 1:]   # Remove header
+        xmlIn = xmlIn[xmlIn.find('>') + 1:]             # Remove header
         root  = ET.fromstring(xmlIn)
         if 0:
             DData = root.find('DeviceData').items()
@@ -54,9 +54,9 @@ class iVISA():
         dType = root[0].attrib['type']
         print(dType, devID)
 
-# #########################################################
+# #############################################################################
 # ## Main Code
-# #########################################################
+# #############################################################################
 if __name__ == "__main__":
     v = iVISA()
     v.open('192.168.58.109')
