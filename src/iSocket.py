@@ -9,7 +9,7 @@ class iSocket():
     def __init__(self):
         self.s = socket.socket()                # Create a socket
 
-    def sOpen(self, host, port):             # noqa: E302
+    def open(self, host, port):             # noqa: E302
         """connect instrument socket"""
         try:
             logging.basicConfig(level=logging.INFO,
@@ -17,19 +17,19 @@ class iSocket():
                                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # noqa:
             self.s.connect((host, port))
             self.s.settimeout(1)                # Timeout(seconds)
-            print(self.sQuery('*IDN?'))
+            print(self.query('*IDN?'))
         except socket.error:
             print(f"SckErr: {socket.error}")
         return self
 
-    def sWrite(self, SCPI):                     # noqa: E302
+    def write(self, SCPI):                     # noqa: E302
         """Socket Write"""
-        logging.info(f'Write> {SCPI}')
+        logging.info(f'Write> {SCPI.strip()}')
         self.s.sendall(f'{SCPI}\n'.encode())    # Write 'SCPI'
 
-    def sQuery(self, SCPI):                     # noqa: E302
+    def query(self, SCPI):                     # noqa: E302
         """Socket Query"""
-        self.sWrite(SCPI)
+        self.write(SCPI)
         try:
             sOut = self.s.recv(2048).strip()    # Read socket
             sOut = sOut.decode()
@@ -54,14 +54,14 @@ class iSocket():
         for cmd in SCPIarry:
             try:
                 if '?' in cmd:
-                    self.sQuery(cmd)
+                    self.query(cmd)
                 else:
-                    self.sWrite(cmd)
-                error = self.sQuery('SYST:ERR?')
+                    self.write(cmd)
+                error = self.query('SYST:ERR?')
                 outStr = f'{error.strip()} {cmd.strip()}'
                 logging.info(outStr)
             except socket.timeout:
-                error = 'SCPI TIMEOUT' + self.sQuery('SYST:ERR?')
+                error = 'SCPI TIMEOUT' + self.query('SYST:ERR?')
                 outStr = f'{error.strip()} {cmd.strip()}'
                 logging.error(outStr)
 
@@ -70,7 +70,5 @@ class iSocket():
 # ## Main Code
 # #########################################################
 if __name__ == "__main__":
-    instr = iSocket().sOpen('192.168.58.109', 5025)
-    instr.sWrite(':INIT:IMM')
-
-    print(instr.sQuery(':FETC:PNO:IPN?'))
+    instr = iSocket().open('192.168.58.109', 5025)
+    instr.write(':INIT:IMM')
