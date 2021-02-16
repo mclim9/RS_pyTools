@@ -1,5 +1,6 @@
 '''Rohde & Schwarz Automation for demonstration use.'''
 import xml.etree.ElementTree as ET
+import logging
 import visa                             # Import VISA module
 
 # #############################################################################
@@ -16,17 +17,27 @@ class iVISA():
 
     def open(self, host):
         '''Open VISA session'''
-        rm = visa.ResourceManager()
-        # rmlist = rm.list_resources()
-        self.VISA = rm.open_resource(f'TCPIP0::{host}::inst0::INSTR')
+        try:
+            logging.basicConfig(level=logging.INFO,
+                        filename=__file__.split('.')[0] + '.log', filemode='a',         # noqa:
+                        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # noqa:
+            rm = visa.ResourceManager()
+            # rmlist = rm.list_resources()
+            self.VISA = rm.open_resource(f'TCPIP0::{host}::inst0::INSTR')
+        except:
+            print(f"VISAErr: ")
+        return self
 
     def query(self, SCPI):
         '''VISA query'''
+        logging.info(f'Write> {SCPI}')
         vOut = self.VISA.query(SCPI)            # Query cmd
+        logging.info(f'Read < {vOut.strip()}')
         return vOut.strip()
 
     def write(self, SCPI):
         '''VISA write'''
+        logging.info(f'Write> {SCPI}')
         self.VISA.write(SCPI)                   # Write cmd
 
     def getSysInfo(self):
