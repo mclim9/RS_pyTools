@@ -1,7 +1,7 @@
 ### Build directories
-/dist/
-/build/
 /*.egg-info/
+/build/
+/dist/
 /proto/
 
 ### IQ Waveform/Capture
@@ -19,13 +19,14 @@
 
 ### Data files
 *.csv
+*.json
 *.xls
-*.xlsx
-*.xlsm
+*.log
 *.pdf
 *.ppt
 *.pptx
-*.json
+*.xlsx
+*.xlsm
 *.zip
 
 ## Testing Files

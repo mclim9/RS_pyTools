@@ -9,7 +9,10 @@ class iSocket():
     def __init__(self):
         self.s = socket.socket()                # Create a socket
 
-    def open(self, host, port):             # noqa: E302
+    def close(self):
+        self.s.close()
+
+    def open(self, host, port):                 # noqa: E302
         """connect instrument socket"""
         try:
             logging.basicConfig(level=logging.INFO,
@@ -22,12 +25,12 @@ class iSocket():
             print(f"SckErr: {socket.error}")
         return self
 
-    def write(self, SCPI):                     # noqa: E302
+    def write(self, SCPI):                      # noqa: E302
         """Socket Write"""
         logging.info(f'Write> {SCPI.strip()}')
         self.s.sendall(f'{SCPI}\n'.encode())    # Write 'SCPI'
 
-    def query(self, SCPI):                     # noqa: E302
+    def query(self, SCPI):                      # noqa: E302
         """Socket Query"""
         self.write(SCPI)
         try:
@@ -45,7 +48,7 @@ class iSocket():
         with open(SCPIFile, 'r') as csv_file:
             fileData = csv_file.readlines()
             for line in fileData:
-                if line[0] != "#":                          # Remove Comments
+                if line[0] != "#":              # Remove Comments
                     SCPIOut.append(line)
         return SCPIOut
 
@@ -71,4 +74,4 @@ class iSocket():
 # #########################################################
 if __name__ == "__main__":
     instr = iSocket().open('192.168.58.109', 5025)
-    instr.write(':INIT:IMM')
+    print(instr.query(':FETC:CC1:ISRC:FRAM:SUMM:POW:MAX? ALL'))

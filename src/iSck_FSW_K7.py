@@ -1,5 +1,4 @@
 """ Rohde & Schwarz Automation for demonstration use."""
-# pylint: disable=E0611,E0401,invalid-name
 from iSocket import iSocket                 # Import socket module
 
 # #############################################################################
