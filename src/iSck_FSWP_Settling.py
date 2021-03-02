@@ -45,7 +45,7 @@ s.write(':TRIG:SEQ:HOLD -100e-6')                   # Trigger Offset
 s.write(':CALC1:MARK1:STAT ON')
 
 s.write(':DISP:WIND1:SUBW:TRAC:Y:SCAL:PDIV 100e3')  # Y Range
-s.write(':SENS:BWID:DEM 0.4e6')                     # DBW
+s.write(':SENS:BWID:DEM 0.8e6')                     # DBW
 s.write(':SENS:ADEM:MTIM 0.5e-3')                   # Measure Time
 s.write(':SENS:FILT1:LPAS:FREQ:REL 10')             # Low Pass Filter Setting  MMM
 s.write(':SENS:FILT1:LPAS:STAT ON')                 # Low Pass Filter ON
