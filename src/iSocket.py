@@ -20,7 +20,8 @@ class iSocket():
                                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # noqa:
             self.s.connect((host, port))
             self.s.settimeout(1)                # Timeout(seconds)
-            print(self.query('*IDN?'))
+            self.idn = self.query('*IDN?')
+            print(self.idn)
         except socket.error:
             print(f"SckErr: {socket.error}")
         return self

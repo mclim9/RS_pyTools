@@ -5,7 +5,7 @@ from iSocket import iSocket                 # Import socket module
 # ## Main Code
 # #############################################################################
 numCC = 4
-freq  = 20e9
+freq  = 28e9
 delta = 99.96e6
 FSW = iSocket().open('192.168.58.109', 5025)
 
