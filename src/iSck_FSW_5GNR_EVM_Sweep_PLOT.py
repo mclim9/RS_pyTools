@@ -6,16 +6,16 @@ import matplotlib.pyplot as plt
 f = __file__.split('_PLOT')[0] + '.txt'
 
 print(f)
-df = pd.read_csv(f, header=0, skiprows=2, sep=',')
+df = pd.read_csv(f, header=0, skiprows=3, sep=',')
 print(f'Cols: {list(df.columns)}')                  # Col names
 
-# ## Remove Data
-
+# ## Filter Data
+df = df[df['Mode'].str.contains('EVM')]            # filter data
 
 # ## Define Pivot Table
 Yval = ['EVM [dB]']                                 # Y Values
 Xval = ['Power [dBm]']                              # X Values
-Cols = ['Freq', 'Mode']                              # Split value
+Cols = ['Freq', 'Mode', 'Gen']                      # Split value
 aggg = 'mean'                                       # mean | sum
 table = pd.pivot_table(df, values=Yval, index=Xval, columns=Cols, aggfunc=aggg)
 print(f'Traces:{table.shape[1]} DataPts:{table.shape[0]}')

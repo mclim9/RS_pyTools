@@ -36,12 +36,13 @@ for freq in freq_arry:
         FSW.write(f':CONF:NR5G:CSC {mode}')
         FSW.write('INIT:CONT OFF')
         FSW.query('INIT:IMM;*OPC?')
-        EVM1 = FSW.query(':FETC:CC1:SUMM:EVM:ALL:AVER?')
-        EVM2 = FSW.query(':FETC:CC2:SUMM:EVM:ALL:AVER?')
-        EVM3 = FSW.query(':FETC:CC3:SUMM:EVM:ALL:AVER?')
-        EVM4 = FSW.query(':FETC:CC4:SUMM:EVM:ALL:AVER?')
-        data = f'{mode},{freq},{pwr},{EVM1},{EVM2},{EVM3},{EVM4}'
-        print(data)
-        fileOut = open(f'{__file__}.txt', 'a')
-        fileOut.write(f'{data}\n')
-        fileOut.close()
+        for i in range(1,5):
+            EVM1 = FSW.query(f':FETC:CC{i}:SUMM:EVM:ALL:AVER?')
+            # EVM2 = FSW.query(':FETC:CC2:SUMM:EVM:ALL:AVER?')
+            # EVM3 = FSW.query(':FETC:CC3:SUMM:EVM:ALL:AVER?')
+            # EVM4 = FSW.query(':FETC:CC4:SUMM:EVM:ALL:AVER?')
+            data = f'{mode},{freq},{pwr},{EVM1},{EVM2},{EVM3},{EVM4}'
+            print(data)
+            fileOut = open(f'{__file__}.txt', 'a')
+            fileOut.write(f'{data}\n')
+            fileOut.close()
