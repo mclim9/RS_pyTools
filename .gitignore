@@ -19,10 +19,12 @@
 
 ### Data files
 *.csv
+*.txt
 *.json
 *.xls
 *.log
 *.pdf
+*.png
 *.ppt
 *.pptx
 *.xlsx
@@ -34,3 +36,7 @@ htmlcov
 .coveralls.yml
 test/.coverage
 /*.coverage
+
+## R&S Files
+*.allocation
+*.nr5g
