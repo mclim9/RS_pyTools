@@ -41,6 +41,10 @@ class iSocket():
             sOut = '<not Read>'
         logging.info(f'Read < {sOut}')
         return sOut
+    
+    def queryFloat(self,SCPI):
+        rdStr = self.query(SCPI)
+        return float(rdStr)
 
     def read_SCPI_file(self, filename):
         '''read SCPI array from file'''
