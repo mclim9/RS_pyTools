@@ -6,7 +6,7 @@ from iSocket import iSocket                                         # Import soc
 # ## Main Code
 # ##############################################################################
 def get_5GNR_settings():
-    s = iSocket().open('169.254.58.109', 5025)
+    s = iSocket().open('192.168.58.105', 5025)
     freq = s.query(':SENS:FREQ:CENT?')                              # Center Frequency
     freq = int(freq) / 1e9
     ldir = s.query(':CONF:NR5G:LDIR?')                              # LinkDir
