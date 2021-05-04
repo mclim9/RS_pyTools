@@ -7,20 +7,22 @@ def get_SMW_FE_Lock():
     print(asdf)
 
 def set_FExx_freq(freq):
-    # ## COnfigure FSVA-->FE
+    # ## Config FSVA-->FE
     FSW.query(f':SENS:EFR1:CONN:STAT ON;*OPC?')         # Connect FE
-    FSW.delay(1)
+    FSW.query(f':SENS:EFR1:CONN:STAT ON;*OPC?')         # Connect FE
+    # FSW.delay(1)
     FSW.write(f':SENS:FREQ:CENT {freq}')                # Center Freq
 
-    # ## COnfigure SMW-->FE
+    # ## Config SMW-->FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
-    FSW.delay(1)
+    # FSW.delay(1)
     SMW.write(f':SOUR:FREQ:CW {freq}')                  # Center Freq
     # SMW.query(':SOUR1:CORR:FRES:RF:OPT:LOC;*OPC?')    #
 
 def set_FExx_amp(pwr):
-    # ## COnfigure FSVA-->FE
+    # ## Config FSVA-->FE
+    FSW.query(f':SENS:EFR1:CONN:STAT ON;*OPC?')         # Connect FE
     FSW.query(f':SENS:EFR1:CONN:STAT ON;*OPC?')         # Connect FE
     FSW.write('INIT:CONT OFF')                          # Single Sweep
     FSW.query('INIT:IMM;*OPC?')
@@ -29,18 +31,17 @@ def set_FExx_amp(pwr):
     FSW.write(f':INP:ATT 0')
     FSW.write(f'DISP:TRAC:Y:SCAL:RLEV {chPwr}')
 
-    # ## COnfigure SMW-->FE
+    # ## Config SMW-->FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
-    FSW.delay(2)
+    # FSW.delay(1)
     SMW.write(f'SOUR:POW:LEV:IMM:AMPL {pwr}')           # RF Pwr
 
 # #############################################################################
 # ## Main Code
 # #############################################################################
-freq_arry = [36e9, 39e9, 43e9, 44e9, 47e9, 50e9]
-freq_arry = range(int(43e9), int(50e9), int(1e9))
-pwr_arry = range(-50, 5, 1)
+freq_arry = range(int(49e9), int(50.1e9), int(100e6))
+pwr_arry = range(-45, 5, 1)
 # freq_arry = range(int(46e9), int(47e9), int(50e6))
 # pwr_arry = [-10, -8, -6, -4, -2]
 filename = __file__.split('.py')[0] + '.txt'
@@ -54,7 +55,7 @@ SMW = iSocket().open('192.168.58.114', 5025)
 SMW.write(':SOUR1:EFR:TRXM:STAT ON')
 fileOut.write(f'{SMW.idn}\n')
 fileOut.write(f'{get_5GNR_settings()}\n')
-fileOut.write('Mode,Freq,Power [dBm],RefLvl [dBm],Attn[dB],EVM [dB],Gen\n')
+fileOut.write('Mode,Freq,Power [dBm],RefLvl [dBm],Attn[dB],ChPwr[dBm],EVM [dB],AutoLvl\n')
 
 set_FExx_freq(49e9)
 set_FExx_amp(-40)
@@ -74,10 +75,12 @@ for mode in ['LEV']:
             # EVM = FSW.query(':FETC:CC1:SUMM:EVM:ALL:AVER?')       # FSW
             EVM = FSW.query(':FETC:CC1:ISRC:FRAM:SUMM:EVM:ALL?')    # FSVA
             FSW.query(f':SENS:EFR1:CONN:STAT ON;*OPC?')             # Connect FE
+            FSW.query(f':SENS:EFR1:CONN:STAT ON;*OPC?')             # Connect FE
             attn = FSW.query('INP:ATT?')                            # Input Attn
             refl = FSW.query('DISP:TRAC:Y:SCAL:RLEV?')
+            chPw = FSW.queryFloat(':FETC:CC1:ISRC:FRAM:SUMM:POW?')  # Channel Pwr
 
-            data = f'{mode},{freq},{pwr},{refl},{attn},{EVM},FE50DTR'
+            data = f'{mode},{freq},{pwr},{refl},{attn},{chPw},{EVM},RMS-12'
             print(data)
             fileOut = open(filename, 'a')
             fileOut.write(f'{data}\n')
