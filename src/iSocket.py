@@ -1,6 +1,7 @@
 """Rohde & Schwarz instrument socket for demonstration use."""
-import socket
 import logging
+import socket
+import time
 import os
 
 
@@ -11,6 +12,9 @@ class iSocket():
 
     def close(self):
         self.s.close()
+
+    def delay(self, seconds):
+        time.sleep(seconds)
 
     def open(self, host, port):                 # noqa: E302
         """connect instrument socket"""
@@ -41,8 +45,8 @@ class iSocket():
             sOut = '<not Read>'
         logging.info(f'Read < {sOut}')
         return sOut
-    
-    def queryFloat(self,SCPI):
+
+    def queryFloat(self, SCPI):
         rdStr = self.query(SCPI)
         return float(rdStr)
 
