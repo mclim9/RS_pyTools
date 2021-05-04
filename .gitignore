@@ -40,3 +40,4 @@ test/.coverage
 ## R&S Files
 *.allocation
 *.nr5g
+src/a_debug.py
