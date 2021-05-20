@@ -16,8 +16,7 @@ def set_FExx_freq(freq):
     # ## Config SMW-->FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
-    # FSW.delay(1)
-    SMW.write(f':SOUR:FREQ:CW {freq}')                  # Center Freq
+    SMW.query(f':SOUR:FREQ:CW {freq};*OPC?')            # Center Freq
     # SMW.query(':SOUR1:CORR:FRES:RF:OPT:LOC;*OPC?')    #
 
 def set_FExx_amp(pwr):
@@ -34,8 +33,7 @@ def set_FExx_amp(pwr):
     # ## Config SMW-->FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
     FSW.query(f':SENS:EFR1:CONN:STAT OFF;*OPC?')        # Disconnect FE
-    # FSW.delay(1)
-    SMW.write(f'SOUR:POW:LEV:IMM:AMPL {pwr}')           # RF Pwr
+    SMW.query(f'SOUR:POW:LEV:IMM:AMPL {pwr};*OPC?')     # RF Pwr
 
 # #############################################################################
 # ## Main Code

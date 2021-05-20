@@ -50,6 +50,10 @@ class iSocket():
         rdStr = self.query(SCPI)
         return float(rdStr)
 
+    def queryInt(self, SCPI):
+        rdStr = self.query(SCPI)
+        return int(rdStr)
+
     def read_SCPI_file(self, filename):
         '''read SCPI array from file'''
         SCPIFile = os.path.splitext(filename)[0] + '.txt'
