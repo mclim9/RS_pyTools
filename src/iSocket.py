@@ -39,11 +39,11 @@ class iSocket():
         """Socket Query"""
         self.write(SCPI)
         try:
-            sOut = self.s.recv(400000).strip()    # Read socket
+            sOut = self.s.recv(40000000).strip()    # Read socket
             sOut = sOut.decode()
         except socket.error:
             sOut = '<not Read>'
-        logging.info(f'Read < {sOut}')
+        # logging.info(f'Read < {sOut}')
         return sOut
 
     def queryFloat(self, SCPI):
@@ -53,6 +53,22 @@ class iSocket():
     def queryInt(self, SCPI):
         rdStr = self.query(SCPI)
         return int(rdStr)
+
+    def read(self):
+        n = 100000
+        try:
+            sOut = bytearray()
+            while len(sOut) < n:
+                packet = self.s.recv(n - len(sOut))
+                if not packet:
+                    return None
+                sOut.extend(packet)
+                if sOut[-1] == 10:
+                    sOut = sOut.decode()
+                    break
+        except socket.error:
+            sOut = '<not Read>'
+        return sOut
 
     def read_SCPI_file(self, filename):
         '''read SCPI array from file'''
