@@ -31,9 +31,20 @@ class iVISA():
     def query(self, SCPI):
         '''VISA query'''
         logging.info(f'Write> {SCPI}')
-        vOut = self.VISA.query(SCPI)                    # Query cmd
-        logging.info(f'Read < {vOut.strip()}')
+        try:
+            vOut = self.VISA.query(SCPI)                    # Query cmd
+            logging.info(f'Read < {vOut.strip()}')
+        except:
+            vOut = ''
         return vOut.strip()
+
+    def queryFloat(self, SCPI):
+        rdStr = self.query(SCPI)
+        return float(rdStr)
+
+    def queryInt(self, SCPI):
+        rdStr = self.query(SCPI)
+        return int(rdStr)
 
     def write(self, SCPI):
         '''VISA write'''
