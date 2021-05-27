@@ -38,8 +38,9 @@ class iSocket():
     def query(self, SCPI):                      # noqa: E302
         """Socket Query"""
         self.write(SCPI)
+        time.sleep(.001)
         try:
-            sOut = self.s.recv(40000000).strip()    # Read socket
+            sOut = self.s.recv(100000).strip()    # Read socket
             sOut = sOut.decode()
         except socket.error:
             sOut = '<not Read>'
@@ -55,7 +56,7 @@ class iSocket():
         return int(rdStr)
 
     def read(self):
-        n = 100000
+        n = 10000000
         try:
             sOut = bytearray()
             while len(sOut) < n:
@@ -64,7 +65,7 @@ class iSocket():
                     return None
                 sOut.extend(packet)
                 if sOut[-1] == 10:
-                    sOut = sOut.decode()
+                    # sOut = sOut.decode()
                     break
         except socket.error:
             sOut = '<not Read>'
@@ -97,6 +98,8 @@ class iSocket():
                 outStr = f'{error.strip()} {cmd.strip()}'
                 logging.error(outStr)
 
+    def timeout(self, seconds):
+        self.s.settimeout(seconds)
 
 # #########################################################
 # ## Main Code

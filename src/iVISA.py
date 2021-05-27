@@ -46,6 +46,10 @@ class iVISA():
         rdStr = self.query(SCPI)
         return int(rdStr)
 
+    def read(self):
+        rdStr = self.VISA.read_raw()
+        return rdStr
+
     def write(self, SCPI):
         '''VISA write'''
         logging.info(f'Write> {SCPI}')

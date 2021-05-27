@@ -12,7 +12,7 @@ def Get_IQ_Data_Ascii(MLEN=1000):
     for i in range(numLoops):
         SCPI = f"TRAC:IQ:DATA:MEM? {i * MLEN},{MLEN}"       # TRAC:IQ:DATA:MEM? <MemStrt>,<MLEN>
         FSW.write(SCPI)
-        Data = FSW.read().split(',')
+        Data = FSW.read().decode().split(',')
         if len(Data) != 2 * MLEN:
             FSW.write(SCPI)
             Data = FSW.read().split(',')
@@ -32,7 +32,8 @@ def Get_IQ_Data_Bin():
     IQBytes  = rdStr[(numBytes + 2):-1]                     # Remove Header
     IQAscii  = struct.unpack("<" + 'f' * int(numIQ / 4), IQBytes)
     print(IQAscii[0:10])
-    return IQBytes
+    FSW.write('Format:DATA ASCII')
+    return IQAscii
 
 def plot_IQ_FFT(IData, QData):
     # ######################################
@@ -43,6 +44,7 @@ def plot_IQ_FFT(IData, QData):
 
     mag = np.fft.fft(IQ) / IQlen
     mag = np.fft.fftshift(mag)                                          # ag = mag[range(N/2)]
+    mag = 20 * np.log10(np.abs(mag)) + 30
 
     frq = np.fft.fftfreq(IQlen, d=1 / (1.6e9))
     frq = np.fft.fftshift(frq)                                          # frq = frq[range(N/2)]
@@ -57,9 +59,7 @@ def plot_IQ_FFT(IData, QData):
     plt.plot(QData, "y", QData, "y")
 
     plt.subplot(2, 1, 2)                                                # Frequency Domain
-    # if self.IQpoints:
-    #     plt.plot(frq, mag,'bo')
-    plt.plot(frq, np.real(mag))
+    plt.plot(frq, mag)
     plt.xlabel('Freq')
     plt.ylabel('magnitude')
     plt.grid(True)
@@ -90,12 +90,12 @@ FSW.write('*CLS')
 FSW.write(':INST:SEL "IQ Analyzer"')        # Select Analog Demod
 FSW.write(f':SENS:FREQ:CENT {Freq}')        # Center Frequency
 FSW.write(f':TRAC:IQ:SRAT {Samp}')          # Sampling Rate
-FSW.write(':SENS:SWE:TIME 0.000050')          # Capture time
-FSW.query(':INIT:IMM;*OPC?')
+FSW.write(':SENS:SWE:TIME 0.000050')        # Capture time
+# FSW.query(':INIT:IMM;*OPC?')
 numData = FSW.queryInt('TRAC:IQ:RLEN?')
 print(f'Number IQ Data: {numData} ASCII:{numData * 18}')
 
-CSVd = Get_IQ_Data_Ascii()
-# CSVd = Get_IQ_Data_Bin()
+# CSVd = Get_IQ_Data_Ascii()
+CSVd = Get_IQ_Data_Bin()
 output = deInterlace(CSVd)
 plot_IQ_FFT(output[0], output[1])
