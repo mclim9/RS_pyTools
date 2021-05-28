@@ -1,31 +1,30 @@
 '''Purpose: Import Library-->Create Object-->Catch obvious typos'''
-#pylint: disable=import-outside-toplevel
 import unittest
 import sys
 
 class TestGeneral(unittest.TestCase):
-    def setUp(self):                                #Run before each test
+    def setUp(self):                                # Run before each test
         sys.path.append('../')
-        print("",end="")
+        print("", end="")
 
-    def tearDown(self):                             #Run after each test
+    def tearDown(self):                             # Run after each test
         pass
 
 ###############################################################################
-### <Test>
+# ## <Test>
 ###############################################################################
     def test_Covid_Class(self):
         from src.covid import covid
         self.baz = covid()
-        self.assertEqual(self.baz.foo,'N')          # Check default value
+        self.assertEqual(self.baz.foo, 'N')          # Check default value
 
     def test_Spam_Class(self):
         from src.spam import spam
         self.eggs = spam()
-        self.assertEqual(self.eggs.ham,'ham')       # Check default value
+        self.assertEqual(self.eggs.ham, 'ham')       # Check default value
 
 ###############################################################################
-### </Test>
+# ## </Test>
 ###############################################################################
 if __name__ == '__main__':                          # pragma: no cover
     # unittest.main()     #Run w/o test names

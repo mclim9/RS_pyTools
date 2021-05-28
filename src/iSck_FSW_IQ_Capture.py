@@ -63,7 +63,9 @@ def plot_IQ_FFT(IData, QData):
     plt.xlabel('Freq')
     plt.ylabel('magnitude')
     plt.grid(True)
-    plt.show()
+    plt.show(block=False)
+    plt.pause(2)
+    plt.close()
 
 def deInterlace(iqData):
     IData = []
@@ -90,7 +92,7 @@ FSW.write('*CLS')
 FSW.write(':INST:SEL "IQ Analyzer"')        # Select Analog Demod
 FSW.write(f':SENS:FREQ:CENT {Freq}')        # Center Frequency
 FSW.write(f':TRAC:IQ:SRAT {Samp}')          # Sampling Rate
-FSW.write(':SENS:SWE:TIME 0.000050')        # Capture time
+FSW.write(':SENS:SWE:TIME 0.000001')        # Capture time
 # FSW.query(':INIT:IMM;*OPC?')
 numData = FSW.queryInt('TRAC:IQ:RLEN?')
 print(f'Number IQ Data: {numData} ASCII:{numData * 18}')
