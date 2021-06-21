@@ -6,6 +6,7 @@ from iSocket import iSocket
 # #############################################################################
 if __name__ == "__main__":
     s = iSocket().open('192.168.58.109', 5025)
+    s.timeout(5)
     print('\n--HW Info--')
     HWInfo = s.query('DIAG:SERV:HWIN?').split('","')
     for module in HWInfo:
@@ -16,9 +17,12 @@ if __name__ == "__main__":
 
     print('\n--Self Test Info--')
     selfTest = s.query('DIAG:SERV:STES:RES?').split(',')
-    print(f"State  : {selfTest[0]}")
-    print(f"Firmwar: {selfTest[1]}")
-    print(f"Date   : {selfTest[2]}")
+    if selfTest[0] in ('', '<not Read>'):
+        print('Selftest not run')
+    else:
+        print(f"State  : {selfTest[0]}")
+        print(f"Firmwar: {selfTest[1]}")
+        print(f"Date   : {selfTest[2]}")
     print(f"FSWTemp: {s.query('SOUR:TEMP:FRON?')}")
 
     print('\n--Switch Count--')
