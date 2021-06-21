@@ -41,3 +41,4 @@ test/.coverage
 *.allocation
 *.nr5g
 src/a_debug.py
+src/VISA_debug.py
