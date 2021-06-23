@@ -1,17 +1,11 @@
 """ Rohde & Schwarz Automation for demonstration use."""
-# ##############################################################################
-# ## User Entry
-# ##############################################################################
 import socket                               # Import socket module
 
 def sQuery(SCPI):
-    """Socket Query"""
     sWrite(SCPI)
-    sOut = s.recv(2048).decode('ascii', 'replace')
-    return sOut
+    return s.recv(2048).decode('ascii', 'replace')
 
 def sQuery_sync(SCPI):
-    """Socket Query"""
     sWrite(SCPI)
     s.recv(6)                               # Read Header
     numByte = int(s.recv(1))                # Read Data Size Bytes
@@ -21,8 +15,6 @@ def sQuery_sync(SCPI):
     return bindata.decode('ascii', 'replace')
 
 def sWrite(SCPI):
-    """Socket Write"""
-    # print(f'Write: {SCPI}')
     s.sendall(f'{SCPI}\n'.encode())         # Write SCPI
 
 def getSCPIPersonality():

@@ -1,18 +1,13 @@
 """ Rohde & Schwarz Automation for demonstration use."""
-# ##############################################################################
-# ## User Entry
-# ##############################################################################
 import socket                               # Import socket module
 
-def sQuery(SCPI):
-    """Socket Query"""
+def sQuery(SCPI):                           # Socket Query
     sWrite(SCPI)
     sOut = s.recv(2048).strip().decode()    # Read socket
     print(f'Query: {sOut}')
     return sOut
 
-def sWrite(SCPI):
-    """Socket Write"""
+def sWrite(SCPI):                           # Socket Write
     print(f'Write: {SCPI}')
     s.sendall(f'{SCPI}\n'.encode())         # Write SCPI
 
