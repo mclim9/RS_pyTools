@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import logging
 import pyvisa as visa                                   # Import VISA module
 
+
 # #############################################################################
 # ## Code Begin
 # #############################################################################
@@ -50,6 +51,9 @@ class iVISA():
         rdStr = self.VISA.read_raw()
         return rdStr
 
+    def timeout(self, sec):
+        self.VISA.timeout = int(sec * 1000)
+
     def write(self, SCPI):
         '''VISA write'''
         logging.info(f'Write> {SCPI}')
@@ -60,7 +64,7 @@ class iVISA():
         xmlIn = self.query("SYST:DFPR?")
 
         xmlIn = xmlIn[xmlIn.find('>') + 1:]             # Remove header
-        root  = ET.fromstring(xmlIn)
+        root = ET.fromstring(xmlIn)
         if 0:
             DData = root.find('DeviceData').items()
             devID = DData[0][1]
@@ -68,6 +72,7 @@ class iVISA():
         devID = root[0].attrib['deviceId']
         dType = root[0].attrib['type']
         print(dType, devID)
+
 
 # #############################################################################
 # ## Main Code
