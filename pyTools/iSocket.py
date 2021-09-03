@@ -8,7 +8,7 @@ import os
 class iSocket():
     """ instrument socket class """
     def __init__(self):
-        self.s = socket.socket()                # Create a socket
+        self.s = socket.socket()                    # Create a socket
 
     def close(self):
         self.s.close()
@@ -16,35 +16,37 @@ class iSocket():
     def delay(self, seconds):
         time.sleep(seconds)
 
-    def open(self, host, port):                 # noqa: E302
+    def open(self, host, port):                     # noqa: E302
         """connect instrument socket"""
         try:
             logging.basicConfig(level=logging.INFO,
                                 filename=__file__.split('.')[0] + '.log', filemode='a',         # noqa:
                                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # noqa:
             self.s.connect((host, port))
-            self.s.settimeout(1)                # Timeout(seconds)
+            self.s.settimeout(1)                    # Timeout(seconds)
             self.idn = self.query('*IDN?')
             print(self.idn)
         except socket.error:
             print(f"SckErr: {socket.error}")
         return self
 
-    def write(self, SCPI):                      # noqa: E302
+    def write(self, SCPI):                          # noqa: E302
         """Socket Write"""
         logging.info(f'Write> {SCPI.strip()}')
-        self.s.sendall(f'{SCPI}\n'.encode())    # Write 'SCPI'
+        self.s.sendall(f'{SCPI}\n'.encode())        # Write 'SCPI'
 
-    def query(self, SCPI):                      # noqa: E302
+    def query(self, SCPI):                          # noqa: E302
         """Socket Query"""
         self.write(SCPI)
+        print(f'{SCPI}  ', end='')
         time.sleep(.001)
         try:
-            sOut = self.s.recv(100000).strip()    # Read socket
+            sOut = self.s.recv(10000000).strip()    # Read socket
             sOut = sOut.decode()
         except socket.error:
             sOut = '<not Read>'
-        # logging.info(f'Read < {sOut}')
+        logging.info(f'Read < {sOut}')
+        print(sOut)
         return sOut
 
     def queryFloat(self, SCPI):
@@ -78,7 +80,7 @@ class iSocket():
         with open(SCPIFile, 'r') as csv_file:
             fileData = csv_file.readlines()
             for line in fileData:
-                if line[0] != "#":              # Remove Comments
+                if line[0] != "#":                  # Remove Comments
                     SCPIOut.append(line)
         return SCPIOut
 
