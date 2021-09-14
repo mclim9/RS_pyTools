@@ -108,4 +108,4 @@ class iSocket():
 # #########################################################
 if __name__ == "__main__":
     instr = iSocket().open('192.168.58.109', 5025)
-    print(instr.query(':FETC:CC1:ISRC:FRAM:SUMM:POW:MAX? ALL'))
+    print(instr.query('*IDN?'))

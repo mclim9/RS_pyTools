@@ -1,7 +1,5 @@
 """ Rohde & Schwarz Automation for demonstration use."""
 import socket                               # Import socket module
-import time
-
 
 def sQuery(SCPI):                           # Socket Query
     sWrite(SCPI)
