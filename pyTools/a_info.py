@@ -2,20 +2,17 @@
 import socket                               # Import socket module
 
 def sQuery(SCPI):                           # Socket Query
-    sWrite(SCPI)
+    s.sendall(f'{SCPI}\n'.encode())         # Write SCPI
     sOut = s.recv(100000).decode().strip()  # Read socket
+    print(sOut)
     return sOut
 
-def sWrite(SCPI):                           # Socket Write
-    s.sendall(f'{SCPI}\n'.encode())         # Write SCPI
-
-# ##############################################################################
-# ## Main Code
-# ##############################################################################
 s = socket.socket()                         # Create a socket object
 s.connect(('192.168.58.114', 5025))
 s.settimeout(5)                             # Timeout in seconds
+sQuery(f'*IDN?')
 
-sWrite('FORM:DATA ASCII')
-print(sQuery(f'*IDN?'))
-print(sQuery(f'*OPT?'))
+s = socket.socket()                         # Create a socket object
+s.connect(('192.168.58.109', 5025))
+s.settimeout(5)                             # Timeout in seconds
+sQuery(f'*IDN?')
