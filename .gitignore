@@ -42,3 +42,4 @@ test/.coverage
 *.nr5g
 src/a_debug.py
 src/VISA_debug.py
+pyTools/utils/iSocket.py
