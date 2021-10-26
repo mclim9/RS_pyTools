@@ -4,9 +4,9 @@ from iSocket import iSocket                 # Import socket module
 # #############################################################################
 # ## Code Begin
 # #############################################################################
-fileName = 'test.wv'
+fileName = 'twoTone.wv'
 
-K2      = iSocket().open('192.168.58.114',5025)
+K2      = iSocket().open('192.168.58.114', 5025)
 f = open(fileName, 'rb')
 data    = f.read()
 f.close()
@@ -14,6 +14,7 @@ f.close()
 # data = b'hello'
 numBytes = len(data)
 numHead  = len(str(numBytes))
-SCPI     = f'MMEMory:DATA "/var/user/{fileName}",#{numHead}{numBytes}'
+SCPI     = f'MMEM:DATA "/var/user/{fileName}",#{numHead}{numBytes}'
 command  = bytes(SCPI, 'utf-8') + data
-K2.write(SCPI)
+K2.writeBin(command)
+asdf = K2.query(':SYST:ERR?')
