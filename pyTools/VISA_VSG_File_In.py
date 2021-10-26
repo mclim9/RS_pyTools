@@ -1,9 +1,7 @@
 """R&S Example code"""
 from iVISA import iVISA
 
-# #############################################################################
-# ## Code Begin
-# #############################################################################
+# Read Source Waveform
 wvName  = 'test.wv'
 f       = open(wvName, 'rb')
 byteAry = f.read()
