@@ -35,6 +35,11 @@ class iSocket():
         logging.info(f'Write> {SCPI.strip()}')
         self.s.sendall(f'{SCPI}\n'.encode())        # Write 'SCPI'
 
+    def writeBin(self, SCPI):                       # noqa: E302
+        """Socket Write"""
+        logging.info(f'Write> {SCPI.strip()}')
+        self.s.sendall(SCPI + bytes([10]))         # Write 'SCPI'
+
     def query(self, SCPI):                          # noqa: E302
         """Socket Query"""
         self.write(SCPI)
