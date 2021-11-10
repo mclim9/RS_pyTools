@@ -1,5 +1,15 @@
-""" Rohde & Schwarz Automation for demonstration use."""
+""" Rohde & Schwarz Automation for demonstration use.
+
+    SMW BB-A Marker --> User1
+    User1:
+        --> Inst Trg A
+        --> NRP-Ext2
+
+    List Mode : Extern Step
+"""
+
 import pyvisa as visa
+
 numMeas = 17
 
 def vQuery(SCPI):                           # Socket Query
@@ -32,7 +42,7 @@ rm = visa.ResourceManager()
 instr = rm.open_resource(f'USB::0x0AAD::0x015F::101467::INSTR')
 instr.timeout = 5000
 
-vQuery(f'*RST;*OPC?')
+# vQuery(f'*RST;*OPC?')
 szBuff = nrpClrError()                          # Clear error queue
 vQuery(f'*IDN?')
 vWrite('SENS:AVER:COUN:AUTO OFF')               # Auto Averaging OFF
