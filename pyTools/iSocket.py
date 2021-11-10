@@ -25,7 +25,7 @@ class iSocket():
             self.s.connect((host, port))
             self.s.settimeout(1)                    # Timeout(seconds)
             self.idn = self.query('*IDN?')
-            print(self.idn)
+            print(f'IDN  : {self.idn}')
         except socket.error:
             print(f"SckErr: {socket.error}")
         return self
@@ -43,7 +43,8 @@ class iSocket():
     def query(self, SCPI):                          # noqa: E302
         """Socket Query"""
         self.write(SCPI)
-        print(f'{SCPI}  ', end='')
+        # print(f'iSckt> {SCPI}  ', end='')
+        print(f'iSckt> {SCPI}  ')
         time.sleep(.001)
         try:
             sOut = self.s.recv(10000000).strip()    # Read socket
@@ -51,7 +52,7 @@ class iSocket():
         except socket.error:
             sOut = '<not Read>'
         logging.info(f'Read < {sOut}')
-        print(sOut)
+        print(f'iSckt< {sOut}')
         return sOut
 
     def queryFloat(self, SCPI):
