@@ -39,14 +39,14 @@ FSW.write("LIST:POW:SET OFF,ON,OFF,EXT,POS,0,0")    # PkPwr, RMS, Avg, TrgSource
 freqs = ['1GHz'] * 21                               # freqs = ["1GHz", "1GHz", "1GHz", "1GHz", "1GHz", "1GHz"]
 lst = []
 for freq in freqs:
-    lst.append(f'{freq},0,10,OFF,NORM,1MHZ,1MHZ,100us,0')    # Freq; RefLvl; Atten; EAttn; FilterType, RBW, VBW, MeasTime, TriggerLevel
+    lst.append(f'{freq},0,10,OFF,NORM,1MHZ,1MHZ,1us,0')    # Freq; RefLvl; Atten; EAttn; FilterType, RBW, VBW, MeasTime, TriggerLevel
 lstcmd = "LIST:POW? " + ','.join(lst)
 
 val = FSW.query(lstcmd)
 validateData(val.split(','))
 
 FSW.write('LIST:POW:STAT OFF')                      # List Evaluation Off
-FSW.query("@LOC; *OPC?")
+# FSW.query("@LOC; *OPC?")
 
 
 # tick = timeit.default_timer()

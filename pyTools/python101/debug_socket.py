@@ -13,7 +13,8 @@ def sWrite(SCPI):                           # Socket Write
     s.sendall(f'{SCPI}\n'.encode())
 
 s = socket.socket()
-s.connect(('192.168.58.109', 5025))
+s.connect(('192.168.58.114', 5025))
 s.settimeout(5)
 
-sQuery(f'*IDN?')
+sQuery(f':MMEM:CDIR?')
+sWrite(f':MMEM:MDIR "/var/user/testtest"')

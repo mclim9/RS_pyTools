@@ -23,3 +23,5 @@ vQuery(f'*IDN?')
 # Sckt : TCPIP0::192.168.1.100::999::SOCKET
 # USB  : USB::0x0AAD::<Modl>::<SerN>::INSTR
 # RSUSB: RSNRP::<Modl>::<SerN>::INSTR
+# GPIB : GPIB0::20::INSTR
+# Seril: ASRL3::INSTR
