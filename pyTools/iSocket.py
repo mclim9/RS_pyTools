@@ -23,7 +23,7 @@ class iSocket():
                                 filename=__file__.split('.')[0] + '.log', filemode='a',         # noqa:
                                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # noqa:
             self.s.connect((host, port))
-            self.s.settimeout(1)                    # Timeout(seconds)
+            self.s.settimeout(5)                    # Timeout(seconds)
             self.idn = self.query('*IDN?')
             print(f'IDN  : {self.idn}')
         except socket.error:
@@ -44,7 +44,7 @@ class iSocket():
         """Socket Query"""
         self.write(SCPI)
         # print(f'iSckt> {SCPI}  ', end='')
-        print(f'iSckt> {SCPI}  ')
+        # print(f'iSckt> {SCPI}  ')
         time.sleep(.001)
         try:
             sOut = self.s.recv(10000000).strip()    # Read socket
@@ -52,7 +52,7 @@ class iSocket():
         except socket.error:
             sOut = '<not Read>'
         logging.info(f'Read < {sOut}')
-        print(f'iSckt< {sOut}')
+        # print(f'iSckt< {sOut}')
         return sOut
 
     def queryFloat(self, SCPI):

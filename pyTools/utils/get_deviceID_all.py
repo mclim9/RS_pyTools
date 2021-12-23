@@ -15,12 +15,23 @@ def sQuery(SCPI):                           # Socket Query
     return sOut
 
 def getSysInfo():
-    s.sendall(f'SYST:DFPR?\n'.encode())
-    xmlIn = s.recv(100000).decode().strip()  # Read socket
+    s.sendall(f'SYST:DFPR?;*OPC?\n'.encode())
+    xmlIn = s.recv(1000000).decode().strip()  # Read socket
     strStart = xmlIn.find('deviceId="') + len('deviceID="')
-    strStop  = xmlIn.find('type="') - 2
+    # strStop  = xmlIn.find('type="') - 2
+    strStop  = strStart + 22
     xmlIn = xmlIn[strStart:strStop]          # Remove header
     print(xmlIn)
+    return xmlIn
+
+def getHwList():
+    s.sendall(f'SYST:DFPR?\n'.encode())
+    xmlIn = s.recv(1000000).decode().strip()  # Read socket
+    # strSearch = '<HardwareData>'
+    # strStart = xmlIn.find(strSearch) + len(strSearch)
+    # strStop  = xmlIn.find('</HardwareData>')
+    # xmlIn = xmlIn[strStart:strStop]          # Remove header
+    # print(xmlIn)
     return xmlIn
 
 ipArry = ['192.168.1.108',
@@ -36,9 +47,11 @@ for inst in ipArry:
     s = socket.socket()                         # Create a socket object
     try:
         s.connect((inst, 5025))
-        s.settimeout(3)                             # Timeout in seconds
+        s.settimeout(10)                             # Timeout in seconds
         logging.info(f"{sQuery('*IDN?')}")
+        # logging.info(f"{sQuery('*OPT?')}")
         logging.info(getSysInfo())
+        logging.info(getHwList())
         s.close()
     except WindowsError:
         pass
