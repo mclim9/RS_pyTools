@@ -15,8 +15,8 @@ s = socket.socket()                         # Create a socket object
 s.connect(('192.168.58.109', 5025))
 s.settimeout(5)                             # Timeout in seconds
 
-# sWrite('FORM:DATA ASCII')
-sWrite('FORM:DATA REAL,32')
+sWrite('FORM:DATA ASCII')
+# sWrite('FORM:DATA REAL,32')
 sWrite('TRAC:IQ:DATA:FORM IQP')
 rdStr = sQuery(f'TRAC:IQ:DATA:MEM?')
 

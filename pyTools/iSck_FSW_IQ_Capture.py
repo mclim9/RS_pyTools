@@ -84,7 +84,7 @@ def deInterlace(iqData):
 # #############################################################################
 FSW = iSocket().open('192.168.58.109', 5025)
 FSW.s.settimeout(5)
-Freq = 4e9
+Freq = 1e9
 Samp = 1.6e9
 # waveform is 50uSec
 
