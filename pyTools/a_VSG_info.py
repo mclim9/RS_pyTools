@@ -1,4 +1,5 @@
 """ Rohde & Schwarz Automation for demonstration use."""
+
 import socket                               # Import socket module
 
 def sQuery(SCPI):                           # Socket Query
