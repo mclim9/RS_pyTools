@@ -16,5 +16,5 @@ s = socket.socket()
 s.connect(('192.168.58.114', 5025))
 s.settimeout(5)
 
-sQuery(f':MMEM:CDIR?')
-sWrite(f':MMEM:MDIR "/var/user/testtest"')
+sWrite(f':SOUR1:CORR:CSET:DATA:FREQ 31GHz, 32GHz, 33GHz, 34GHz')
+sWrite(f':SOUR1:CORR:CSET:DATA:POW 1, 2, 3, 4')
