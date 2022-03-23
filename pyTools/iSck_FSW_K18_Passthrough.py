@@ -1,4 +1,4 @@
-"""Rohde & Schwarz Automation for IQ Analyzer use."""
+import timeit
 from iSocket import iSocket                                         # Import socket module
 
 def SMW_K18_connect(ipAddr):
@@ -25,15 +25,19 @@ def SMW_K18_powerValue(dBm):
 def SMW_K18_query(SCPI):
     s.write(f':CONF:GEN:REL:WRIT "{SCPI}"')
     rdStr = s.query(f':CONF:GEN:REL:READ?')
+    # rdStr = s.query(f':CONF:GEN:REL:WRIT "{SCPI}"; READ?')
     return rdStr
 
 def SMW_K18_write(SCPI):
-    s.query(f':CONF:GEN:REL:WRIT "{SCPI}"')
+    s.write(f':CONF:GEN:REL:WRIT "{SCPI}"')
 
 if __name__ == "__main__":
     s = iSocket().open('192.168.58.109', 5025)
+    s.query(f':INST:SEL "Amplifier";*OPC?')
     SMW_K18_connect('192.168.58.114')
     SMW_K18_powerState('ON')
     SMW_K18_powerValue('-20')
     SMW_K18_write(':SOUR1:FREQ:CW 2e9')
+    tick = timeit.default_timer()
     print(SMW_K18_query('*IDN?'))
+    print(f'CmdTime: {timeit.default_timer() - tick} secs')

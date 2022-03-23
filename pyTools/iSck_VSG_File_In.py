@@ -4,7 +4,7 @@ from iSocket import iSocket                 # Import socket module
 # #############################################################################
 # ## Code Begin
 # #############################################################################
-fileName = 'twoTone.wv'
+fileName = 'iSck_VSG_File_In.wv'
 
 K2      = iSocket().open('192.168.58.114', 5025)
 f = open(fileName, 'rb')
