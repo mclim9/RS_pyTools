@@ -26,9 +26,9 @@ class iSocket():
         tick = timeit.default_timer()
         self.write(SCPI)
         # time.sleep(.001)
-        print(f'Write: {timeit.default_timer() - tick:.6f}sec')
+        # print(f'Write: {timeit.default_timer() - tick:.6f}sec')
         sOut = self.read()
-        print(f'Query: {timeit.default_timer() - tick:.6f}sec')
+        # print(f'Query: {timeit.default_timer() - tick:.6f}sec')
         return sOut
 
     def read(self):
@@ -100,17 +100,20 @@ for SMWClk in [500, 1000, 2000, 3000, 4000]:
             cmd = f'{freq},0,10,OFF,NORM,3MHZ,3MHZ,{MeasTime},0' # Freq; RLvl; Attn; EAttn; Filter, RBW, VBW, MeasTime, TrgrLvl
             lst.append(cmd)
         lstcmd = "LIST:POW? " + ','.join(lst)
+        # lstcmd = "LIST:POW " + ','.join(lst)
 
         SMW.write(':SOUR1:BB:ARB:TRIG:EXEC')                # SMW start trigger
         tick = timeit.default_timer()
+        # FSW.write(lstcmd)
+        # val = FSW.query('INIT:IMM;SENS:LIST:POW:RES?')
         val = FSW.query(lstcmd)
         RealTotal = timeit.default_timer() - tick
         header = 'Points, Clock, CalcMeas, CalcTotal, RealTotal, RealMeas, MeasTime'
         CalcMeas = 2 / SMWClk
+        print(header)
         dataOt = f'{Points},{SMWClk},{CalcMeas:.6f},{CalcMeas * Points:.6f},{RealTotal:.6f},{RealTotal / Points:.6f},{MeasTime}'
-        print(f'{dataOt},{validateData(val.split(","))}')
-        # validateData(val.split(','))
+        print(f'{dataOt}')
         time.sleep(WvSamp / SMWClk)
 
-# FSW.write('LIST:POW:STAT OFF')                      # List Evaluation Off
+FSW.write('LIST:POW:STAT OFF')                      # List Evaluation Off
 # FSW.write("@LOC")
