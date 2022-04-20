@@ -30,6 +30,17 @@ class iSocket():
             print(f"SckErr: {socket.error}")
         return self
 
+    def opc(self, SCPI):
+        self.write("*ESE 1")               # Event Status Enable
+        self.write("*SRE 32")              # SRE Def: Bit5:Std Event
+        self.write("INIT:IMM;*OPC")        # *OPC will trigger ESR
+        read = 0
+        while (read & 1) != 1:             # Loop until done
+            read = self.queryInt("*ESR?")     # Poll ESB
+            time.sleep(0.5)
+            # if time.delta > 300:           # Timeout
+            #     break
+
     def write(self, SCPI):                          # noqa: E302
         """Socket Write"""
         logging.info(f'Write> {SCPI.strip()}')
@@ -114,4 +125,5 @@ class iSocket():
 # #########################################################
 if __name__ == "__main__":
     instr = iSocket().open('192.168.58.109', 5025)
+    instr.opc('INIT:IMM')
     print(instr.query('*IDN?'))

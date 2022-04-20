@@ -2,7 +2,7 @@
 import xml.etree.ElementTree as ET
 import logging
 import pyvisa as visa                                   # Import VISA module
-
+import time
 
 # #############################################################################
 # ## Code Begin
@@ -28,6 +28,17 @@ class iVISA():
         except visa.errors:
             print(f"VError: {visa.errors}")
         return self
+
+    def opc(self, SCPI):
+        self.write("*ESE 1")               # Event Status Enable
+        self.write("*SRE 32")              # SRE Def: Bit5:Std Event
+        self.write("INIT:IMM;*OPC")        # *OPC will trigger ESR
+        read = 0
+        while (read & 1) != 1:             # Loop until done
+            read = self.queryInt("*ESR?")     # Poll ESB
+            time.sleep(0.5)
+            # if time.delta > 300:           # Timeout
+            #     break
 
     def query(self, SCPI):
         '''VISA query'''
@@ -80,6 +91,6 @@ class iVISA():
 if __name__ == "__main__":
     v = iVISA()
     v.open('192.168.58.109')
-    print(f'Info: {v.query("*IDN?")}')
+    v.opc('INIT:IMM')
     v.getSysInfo()
     v.close()
