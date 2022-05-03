@@ -108,7 +108,7 @@ for SMWClk in [500, 1000, 2000, 3000, 4000]:
         # val = FSW.query('INIT:IMM;SENS:LIST:POW:RES?')
         val = FSW.query(lstcmd)
         RealTotal = timeit.default_timer() - tick
-        header = 'Points, Clock, CalcMeas, CalcTotal, RealTotal, RealMeas, MeasTime'
+        header = 'NumMeas, SMWClk,TrigTime, CalcTotal, RealTotal, RealMeas, MeasTime'
         CalcMeas = 2 / SMWClk
         print(header)
         dataOt = f'{Points},{SMWClk},{CalcMeas:.6f},{CalcMeas * Points:.6f},{RealTotal:.6f},{RealTotal / Points:.6f},{MeasTime}'

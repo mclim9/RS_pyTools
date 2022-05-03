@@ -32,4 +32,5 @@ rm = visa.ResourceManager()
 instr = rm.open_resource(f'USB::0x0AAD::0x015F::101467::INSTR')
 instr.timeout = 5000
 
+print(f'IDN:{vQuery(f"*IDN?")} {Get_Power()}')
 vQuery(f'*IDN?')
