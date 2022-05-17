@@ -11,7 +11,7 @@ class iSocket():
     def open(self, host, port):                     # noqa: E302
         try:
             self.s.connect((host, port))
-            self.s.settimeout(1)                    # Timeout(seconds)
+            self.s.settimeout(10)                    # Timeout(seconds)
             self.idn = self.query('*IDN?')
             print(f'IDN  : {self.idn}')
         except socket.error:
@@ -33,7 +33,7 @@ class iSocket():
 
     def read(self):
         try:
-            sOut = self.s.recv(10000000).strip()    # Read socket
+            sOut = self.s.recv(1000000).strip()    # Read socket
             sOut = sOut.decode()
         except socket.error:
             sOut = '<not Read>'
@@ -66,13 +66,16 @@ def validateData(dataArry):
 SMW = iSocket().open('192.168.58.114', 5025)
 FSW = iSocket().open('192.168.58.109', 5025)
 FSW.timeout(10)
+SMW.timeout(10)
+
 SMWClk = 2000
-WvSamp = 10000
 Points = 20
 MeasTime = 200e-6
 
+SMW.query("*RST;*OPC?")
+SMW.write("*CLS")
 SMW.write(':SOUR1:BB:ARB:WAV:SEL "/var/user/listmode/SquareMarker"')
-# SMW.write(':SOUR1:BB:ARB:TRIG:SEQ SING')            # Single play
+SMW.write(':SOUR1:BB:ARB:TRIG:SEQ SING')            # Single play
 SMW.write(f':SOUR1:BB:ARB:CLOC {SMWClk}')
 SMW.write(':OUTP1:TM1:SIGN MARKA1')
 SMW.write(':SOUR1:BB:ARB:STAT 1')
@@ -85,15 +88,20 @@ SMW.write(':SOUR1:LIST:TRIG:SOUR EXT')              # External trigger
 SMW.write(':SOUR1:FREQ:MODE LIST')                  # List mode on
 SMW.write(':SOUR1:LIST:RES')                        # Reset List
 
+FSW.query("*RST;*OPC?")
+FSW.write("*CLS")
 FSW.write(':INST:SEL "SPECTRUM"')                   # Select Analog Demod
 FSW.write(':INIT:CONT OFF')                         # Cont Sweep Off
 FSW.write("LIST:POW:SET OFF,ON,OFF,EXT,POS,0,0")    # PkPwr, RMS, Avg, TrgSource, TrgSlope,TrgOffset, GateLen
 
 FSW.write('FORM:DATA REAL,32')
 # FSW.write('FORMAT:DATA ASCII')
+print('Pts,Clk ,TrigTime,CalcTotl,RealTotl,Sec/Pt  ,FSWSetting')
+
 for SMWClk in [500, 1000, 2000, 3000, 4000]:
+    SMW.query(f':SOUR1:BB:ARB:CLOC {SMWClk};*OPC?')
+    SMW.query(':SOUR1:BB:ARB:TRIG:EXEC;*OPC?')
     for Points in [20, 40, 60, 100, 200]:
-        SMW.query(f':SOUR1:BB:ARB:CLOC {SMWClk};*OPC?')
         freqs = ['1GHz'] * Points                           # freqs
         lst = []
         for freq in freqs:
@@ -108,12 +116,9 @@ for SMWClk in [500, 1000, 2000, 3000, 4000]:
         # val = FSW.query('INIT:IMM;SENS:LIST:POW:RES?')
         val = FSW.query(lstcmd)
         RealTotal = timeit.default_timer() - tick
-        header = 'NumMeas, SMWClk,TrigTime, CalcTotal, RealTotal, RealMeas, MeasTime'
         CalcMeas = 2 / SMWClk
-        print(header)
-        dataOt = f'{Points},{SMWClk},{CalcMeas:.6f},{CalcMeas * Points:.6f},{RealTotal:.6f},{RealTotal / Points:.6f},{MeasTime}'
+        dataOt = f'{Points:3d},{SMWClk:4d},{CalcMeas:.6f},{CalcMeas * Points:.6f},{RealTotal:.6f},{RealTotal / Points:.6f},{MeasTime}'
         print(f'{dataOt}')
-        time.sleep(WvSamp / SMWClk)
 
 FSW.write('LIST:POW:STAT OFF')                      # List Evaluation Off
 # FSW.write("@LOC")
