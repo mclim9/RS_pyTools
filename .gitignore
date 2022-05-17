@@ -1,7 +1,8 @@
 ### Build directories
 /*.egg-info/
-/build/
-/dist/
+build/
+dist/
+fixture/
 /proto/
 
 ### IQ Waveform/Capture
