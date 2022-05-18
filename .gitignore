@@ -44,3 +44,4 @@ test/.coverage
 src/a_debug.py
 src/VISA_debug.py
 pyTools/utils/iSocket.py
+*_debug.py
