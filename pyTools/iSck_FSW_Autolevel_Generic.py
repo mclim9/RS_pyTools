@@ -33,26 +33,24 @@ def shift_attn(delta):
 
 def optimize_FrontEnd():
     s.write('INIT:CONT OFF')
-    # s.write(':CONF:POW:AUTO ONCE;*WAI')                 # 802.11
-    s.write(':SENS:ADJ:LEV;*WAI')                     # Spec; 5GNR; IQ_Analyzer
+    # s.write(':CONF:POW:AUTO ONCE;*WAI')               # 802.11
+    s.write(':SENS:ADJ:LEV;*WAI')                       # Spec; 5GNR; IQ_Analyzer
     get_Settings()
 
-    end_attn_delta = 1
     while Get_Ovld_Stat() == 0:
         shift_attn(-1)
         if (get_Settings()[2] == 0):                    # Get Attn
             end_attn_delta = 0
             break
-    shift_attn(end_attn_delta)
+    shift_attn(1)
 
-    end_reflvl_shift = 1
     num_loop = 0
     while (Get_Ovld_Stat() == 0) and (num_loop < 10):
         shift_RefLvl(-1)
         if get_Settings()[1] > 30:                      # Ref Level
             break
         num_loop += 1
-    shift_RefLvl(end_reflvl_shift)
+    shift_RefLvl(1)
 
     if Get_Ovld_Stat() > 1:                             # Final IF Overload check
 
