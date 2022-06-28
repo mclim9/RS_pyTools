@@ -1,5 +1,5 @@
 """ Rohde & Schwarz Automation for demonstration use."""
-from iSocket import iSocket                 # Import socket module
+from iSocket import iSocket
 import timeit
 oldEVM = 0
 
@@ -8,20 +8,17 @@ def get_Settings():
     refl = s.queryFloat('DISP:TRAC:Y:SCAL:RLEV?')       # Reference Level
     attn = s.queryInt(':INP:ATT?')                      # Input Attn
     # pamp = s.queryInt(':INP:GAIN:STAT?')              # Preamp
-    pamp = 9999
+    pamp = 9999                                         # no Preamp in FE
     tick = timeit.default_timer()
-    s.query('INIT:IMM;*OPC?')
-    ovld = s.queryFloat(':FETC:CC1:ISRC:FRAM:SUMM:EVM:ALL:AVER?')            # Overload Status
-    print(f'{freq}GHz,{refl:6.2f}dBm,{attn:2d}dB,PA{pamp},EVM:{ovld:.2f}')
     timeDelta = timeit.default_timer() - tick
-    # print(f'TTime: {timeDelta:.6f} sec')
+    print(f'{freq}GHz, {refl:6.2f}dBm,{attn:2d}dB, PA{pamp}, oldEVM:{oldEVM:.2f}, {timeDelta * 1000:.3f}msec')
 
     return [freq, refl, attn, pamp]
 
 def Get_EVM_Stat():
     global oldEVM
     s.query('INIT:IMM;*OPC?')
-    newEVM = float(s.query(':FETC:CC1:ISRC:FRAM:SUMM:EVM:ALL:AVER?'))      # WLANAD
+    newEVM = float(s.query(':FETC:CC1:ISRC:FRAM:SUMM:EVM:ALL:AVER?'))      # 5GNR
     delta = oldEVM - newEVM
     oldEVM = newEVM
     return delta
@@ -41,9 +38,8 @@ def optimize_FrontEnd():
     s.write('INIT:CONT OFF')
     s.write(f':INP:ATT:AUTO OFF')
     s.write(f':INP:ATT 0')
-    # s.write(f':DISP:TRAC:Y:SCAL:RLEV 0')
-    # s.write(':SENS:ADJ:LEV;*WAI')                         # Spec; 5GNR; IQ_Analyzer AL
-    chPwr = s.queryFloat(f':FETC:CC1:ISRC:FRAM:SUMM:POW:AVER?')  # Get Power(dBm)
+    # s.write(':SENS:ADJ:LEV;*WAI')                             # 5GNR Autolevel
+    chPwr = s.queryFloat(f':FETC:CC1:ISRC:FRAM:SUMM:POW:AVER?') # Get 5G Power(dBm)
     s.write(f':DISP:TRAC:Y:SCAL:RLEV {chPwr + 12}')
     get_Settings()
 
