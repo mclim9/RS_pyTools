@@ -4,12 +4,12 @@ import timeit
 oldEVM = 0
 
 def get_Settings():
-    freq = s.queryFloat(':SENS:FREQ:CENT?') / 1e9       # Center Frequency
+    tick = timeit.default_timer()
+    freq = s.queryFloat(':SENS:FREQ:CENT?') / 1e9       # Center Frequency (130mSec)
     refl = s.queryFloat('DISP:TRAC:Y:SCAL:RLEV?')       # Reference Level
     attn = s.queryInt(':INP:ATT?')                      # Input Attn
     # pamp = s.queryInt(':INP:GAIN:STAT?')              # Preamp
     pamp = 9999                                         # no Preamp in FE
-    tick = timeit.default_timer()
     timeDelta = timeit.default_timer() - tick
     print(f'{freq}GHz, {refl:6.2f}dBm,{attn:2d}dB, PA{pamp}, oldEVM:{oldEVM:.2f}, {timeDelta * 1000:.3f}msec')
 
@@ -35,13 +35,14 @@ def shift_attn(delta):
 
 def optimize_FrontEnd():
     tick = timeit.default_timer()
-    s.write('INIT:CONT OFF')
-    s.write(f':INP:ATT:AUTO OFF')
-    s.write(f':INP:ATT 0')
+    s.write('INIT:CONT OFF')                                    # Stop screen updates
+    s.write(f':INP:ATT:AUTO OFF')                               # Attn Manual
+    s.write(f':INP:ATT 0')                                      # Attn = 0
     # s.write(':SENS:ADJ:LEV;*WAI')                             # 5GNR Autolevel
+    s.query('INIT:IMM;*OPC?')                                   # Update screen
     chPwr = s.queryFloat(f':FETC:CC1:ISRC:FRAM:SUMM:POW:AVER?') # Get 5G Power(dBm)
-    s.write(f':DISP:TRAC:Y:SCAL:RLEV {chPwr + 12}')
-    get_Settings()
+    s.write(f':DISP:TRAC:Y:SCAL:RLEV {chPwr + 12}')             # Set Reflvl
+    # get_Settings()
 
     end_attn_delta = -1
     while Get_EVM_Stat() > 0:
@@ -50,11 +51,11 @@ def optimize_FrontEnd():
             end_attn_delta = 0
             break
     shift_attn(end_attn_delta)
-    get_Settings()
+    # get_Settings()
 
     num_loop = 0
-    while (Get_EVM_Stat() > 0) and (num_loop < 10):
-        shift_RefLvl(-2)
+    while (Get_EVM_Stat() > 0) and (num_loop < 15):
+        shift_RefLvl(-3)
         if get_Settings()[1] > 30:                      # Ref Level
             break
         num_loop += 1

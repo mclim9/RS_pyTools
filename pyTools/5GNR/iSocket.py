@@ -63,7 +63,6 @@ class iSocket():
         except socket.error:
             sOut = '<not Read>'
         logging.info(f'Read < {sOut}')
-        # print(f'iSckt< {sOut}')
         return sOut
 
     def queryFloat(self, SCPI):
