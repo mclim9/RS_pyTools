@@ -24,12 +24,12 @@ def Get_EVM_Stat():
     return delta
 
 def shift_RefLvl(delta):
-    refl = s.query('DISP:TRAC:Y:SCAL:RLEV?')            # Reference Level
+    refl = s.query('DISP:TRAC:Y:SCAL:RLEV?')                    # Set Ref Level
     refl = float(refl)
     s.write(f':DISP:TRAC:Y:SCAL:RLEV {refl + delta}')
 
 def shift_attn(delta):
-    attn = s.query(':INP:ATT?')                         # Attenuation
+    attn = s.query(':INP:ATT?')                                 # Attenuation
     attn = float(attn)
     s.write(f':INP:ATT {attn + delta}')
 
@@ -41,26 +41,25 @@ def optimize_FrontEnd():
     # s.write(':SENS:ADJ:LEV;*WAI')                             # 5GNR Autolevel
     s.query('INIT:IMM;*OPC?')                                   # Update screen
     chPwr = s.queryFloat(f':FETC:CC1:ISRC:FRAM:SUMM:POW:AVER?') # Get 5G Power(dBm)
-    s.write(f':DISP:TRAC:Y:SCAL:RLEV {chPwr + 12}')             # Set Reflvl
-    # get_Settings()
+    s.write(f':DISP:TRAC:Y:SCAL:RLEV {chPwr + 0}')              # Set Reflvl
 
     end_attn_delta = -1
     while Get_EVM_Stat() > 0:
         shift_attn(2)
-        if (get_Settings()[2] == 0):                    # Get Attn
+        if (get_Settings()[2] == 0):                            # Break if Attn=0
             end_attn_delta = 0
             break
     shift_attn(end_attn_delta)
-    # get_Settings()
 
     num_loop = 0
-    while (Get_EVM_Stat() > 0) and (num_loop < 15):
-        shift_RefLvl(-3)
-        if get_Settings()[1] > 30:                      # Ref Level
+    while (Get_EVM_Stat() > -.2) and (num_loop < 15):
+        shift_RefLvl(-2)
+        if get_Settings()[1] > 30:                              # Break RefLevel>30
             break
         num_loop += 1
-    shift_RefLvl(1)
+    shift_RefLvl(2)
     timeDelta = timeit.default_timer() - tick
+    get_Settings()
     print(f'TTime: {timeDelta:.6f} sec')
 
 if __name__ == "__main__":
