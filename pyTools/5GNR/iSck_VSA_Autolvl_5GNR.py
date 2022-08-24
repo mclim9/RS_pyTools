@@ -5,6 +5,9 @@ oldEVM = 0
 
 def get_Settings():
     tick = timeit.default_timer()
+    freq = 0
+    freq = s.queryFloat(':SENS:FREQ:CENT?') / 1e9       # Center Frequency (50mSec)
+    tick = timeit.default_timer()
     freq = s.queryFloat(':SENS:FREQ:CENT?') / 1e9       # Center Frequency (130mSec)
     refl = s.queryFloat('DISP:TRAC:Y:SCAL:RLEV?')       # Reference Level
     attn = s.queryInt(':INP:ATT?')                      # Input Attn
@@ -63,5 +66,5 @@ def optimize_FrontEnd():
     print(f'TTime: {timeDelta:.6f} sec')
 
 if __name__ == "__main__":
-    s = iSocket().open('192.168.10.40', 5025)
+    s = iSocket().open('192.168.58.109', 5025)
     optimize_FrontEnd()

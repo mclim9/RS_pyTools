@@ -31,27 +31,27 @@ class iSocket():
         return self
 
     def opc(self, SCPI):
-        self.write("*ESE 1")               # Event Status Enable
-        self.write("*SRE 32")              # SRE Def: Bit5:Std Event
-        self.write("INIT:IMM;*OPC")        # *OPC will trigger ESR
+        self.write("*ESE 1")                # Event Status Enable
+        self.write("*SRE 32")               # SRE Def: Bit5:Std Event
+        self.write("INIT:IMM;*OPC")         # *OPC will trigger ESR
         read = 0
-        while (read & 1) != 1:             # Loop until done
-            read = self.queryInt("*ESR?")     # Poll ESB
+        while (read & 1) != 1:              # Loop until done
+            read = self.queryInt("*ESR?")   # Poll ESB
             time.sleep(0.5)
-            # if time.delta > 300:           # Timeout
+            # if time.delta > 300:          # Timeout
             #     break
 
-    def write(self, SCPI):                          # noqa: E302
+    def write(self, SCPI):
         """Socket Write"""
         logging.info(f'Write> {SCPI.strip()}')
         self.s.sendall(f'{SCPI}\n'.encode())        # Write 'SCPI'
 
-    def writeBin(self, SCPI):                       # noqa: E302
+    def writeBin(self, SCPI):
         """Socket Write"""
         logging.info(f'Write> {SCPI.strip()}')
-        self.s.sendall(SCPI + bytes([10]))         # Write 'SCPI'
+        self.s.sendall(SCPI + bytes([10]))          # Write 'SCPI'
 
-    def query(self, SCPI):                          # noqa: E302
+    def query(self, SCPI):
         """Socket Query"""
         self.write(SCPI)
         # print(f'iSckt> {SCPI}  ', end='')
@@ -67,12 +67,10 @@ class iSocket():
         return sOut
 
     def queryFloat(self, SCPI):
-        rdStr = self.query(SCPI)
-        return float(rdStr)
+        return float(self.query(SCPI))
 
     def queryInt(self, SCPI):
-        rdStr = self.query(SCPI)
-        return int(rdStr)
+        return int(self.query(SCPI))
 
     def read(self):
         n = 10000000

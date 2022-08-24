@@ -54,9 +54,9 @@ def Get_IQ_Data_Bin():
     FSW.write('TRAC:IQ:DATA:FORM IQP')
     FSW.write('TRAC:IQ:DATA:MEM?')
     rdStr = FSW.read()
-    numBytes = int(chr(rdStr[1]))                           # Number of Bytes
-    numIQ    = int(rdStr[2:2 + numBytes])
-    IQBytes  = rdStr[(numBytes + 2):-1]                     # Remove Header
+    hdrBytes = int(chr(rdStr[1]))                           # Number of Bytes
+    numIQ    = int(rdStr[2:2 + hdrBytes])
+    IQBytes  = rdStr[(hdrBytes + 2):-1]                     # Remove Header
     IQAscii  = struct.unpack("<" + 'f' * int(numIQ / 4), IQBytes)
     print(IQAscii[0:10])
     FSW.write('Format:DATA ASCII')

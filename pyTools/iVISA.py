@@ -51,16 +51,13 @@ class iVISA():
         return vOut.strip()
 
     def queryFloat(self, SCPI):
-        rdStr = self.query(SCPI)
-        return float(rdStr)
+        return float(self.query(SCPI))
 
     def queryInt(self, SCPI):
-        rdStr = self.query(SCPI)
-        return int(rdStr)
+        return int(self.query(SCPI))
 
     def read(self):
-        rdStr = self.VISA.read_raw()
-        return rdStr
+        return self.VISA.read_raw()
 
     def timeout(self, sec):
         self.VISA.timeout = int(sec * 1000)

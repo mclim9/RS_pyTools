@@ -6,9 +6,11 @@ freqStart =  7000000000
 freqStop  = 44000000000
 freqStep  =   500000000
 
-# f = open('NoiseSweep.csv', 'a')
+f = open('NoiseSweep.csv', 'a')
 FSW.write('INIT:CONT OFF')
+FSW.write(':SENS:WIND1:DET1:FUNC RMS')
 
+f.write("SMW-GHz,RMS ,NoiseBW,FSWFreq,MeasTim,Fs-MHz ,Mkr-dBm\n")
 print('Freq-GHz,RMS ,Noise,FSWFreq,MeasTim,Fs-MHz ,Mkr-dBm')
 for freqFSW in [24, 27, 30, 37, 40, 43]:
     FSW.write(f':SENS:FREQ:CENT {freqFSW}GHz')
@@ -23,5 +25,5 @@ for freqFSW in [24, 27, 30, 37, 40, 43]:
         measTim = FSW.queryFloat(':SENS:SWE:TIME?')
         outStr = f'{freq/1e9:6.3f},{ampli:6.2f},{noiBW/1e6:6.1f},{freqFSW:6.3f},{measTim:6.3f},{sampRat/1e6:6.3f},{markY:6.3f}'
         print(outStr)
-        # f.write(outStr + "\n")
-    # f.close()
+        f.write(outStr + "\n")
+f.close()

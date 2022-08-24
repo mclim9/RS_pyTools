@@ -2,13 +2,27 @@ from iSocket import iSocket                 # Import socket module
 import numpy as np
 import timeit
 
+def readFile():
+    f = open('iSck_VSG_IQ_FromArray.env', 'r')
+    data    = f.readlines()
+    f.close()
+    IData = []
+    QData = []
+    for line in data:
+        if line[0] != '#':
+            IQ = line.strip().split(',')
+            IData.append(float(IQ[0]))
+            QData.append(float(IQ[1]))
+    return IData, QData
+
 # #############################################################################
 # ## Code Begin
 # #############################################################################
+IData, QData = readFile()
 fileName = 'iSck_VSG_IQ_FromArray'
 clock = 122.88e6                                                # Sampling Rate
-IData = [0.1, 0.2, 0.3]
-QData = [0.4, 0.5, 0.6]
+# IData = [0.1, 0.2, 0.3]
+# QData = [0.4, 0.5, 0.6]
 
 # ## ASCII
 scpi  = f':MMEM:DATA:UNPR "NVWFM://var//user//{fileName}.wv",#' # Ascii Cmd
