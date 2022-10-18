@@ -21,7 +21,7 @@ data2 = sQuery(':TRAC4:DATA? TRACE2')
 data3 = sQuery(':TRAC4:DATA? TRACE3')
 data4 = sQuery(':TRAC4:DATA? TRACE4')
 totalData = (data1 + data2 + data3 + data4).split(',')  # Concatenate Data
-
+# BWP; SubFrame; Slot; AllocID; Codeword1; Modulation; #decoded bits; #bit Error; #symbol/bit; Bitstream
 segStart = 0
 numBitsOffset = 8
 

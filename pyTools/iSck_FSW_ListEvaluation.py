@@ -22,18 +22,24 @@ SMW = iSocket().open('192.168.58.114', 5025)
 FSW = iSocket().open('192.168.58.109', 5025)
 FSW.timeout(10)
 
-
+# T/M/C1 --> INST TRG A
+# T/M/C1 --> FSW Trg 1
 SMW.write(':SOUR1:BB:ARB:WAV:SEL "/var/user/listmode/SquareMarker"')
 SMW.write(':SOUR1:BB:ARB:CLOC 1KHz')
 SMW.write(':OUTP1:TM1:SIGN MARKA1')
 SMW.write(':SOUR1:BB:ARB:STATe 1')
 SMW.write(':SOUR1:IQ:STATe 0')
+SMW.write(':SOUR1:BB:ARB:TRIG:SEQ SING')            # Trigger
+SMW.write(':SOUR1:BB:ARB:TRIG:SLUN SEQ')            # Trigger
+SMW.write(':SOUR1:BB:ARB:TRIG:SLEN 20')             # Trigger
+
 
 SMW.write(':OUTP1:STAT 1')
 SMW.write(':SOUR1:LIST:SEL "/var/user/listmode/listmode_pwrSweep"')
 SMW.write(':SOUR1:LIST:MODE STEP')
-SMW.write(':SOUR1:LIST:TRIG:SOUR EXT')
+SMW.write(':SOUR1:LIST:TRIG:SOUR EXT')              # INST TRG A trigger
 SMW.write(':SOUR1:FREQ:MODE LIST')
+SMW.query("@LOC; *OPC?")
 
 FSW.write(':INST:SEL "SPECTRUM"')                   # Select Analog Demod
 FSW.write(':INIT:CONT OFF')                         # Cont Sweep Off

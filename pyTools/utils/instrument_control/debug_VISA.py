@@ -16,6 +16,7 @@ instr = rm.open_resource(f'TCPIP0::192.168.58.115::inst0::INSTR')
 # s.settimeout(5)
 
 vQuery(f'*IDN?')
+vQuery(f'*OPT?')
 
 # HISLP: TCPIP0::192.168.1.100::hislip0::INSTR
 # VXI11: TCPIP0::192.168.1.100::inst0::INSTR
