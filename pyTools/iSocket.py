@@ -66,6 +66,16 @@ class iSocket():
         # print(f'iSckt< {sOut}')
         return sOut
 
+    def queryBin(self, SCPI):
+        self.write(SCPI)
+        try:
+            sOut = self.s.recv(10000000).strip()    # Read socket
+        except socket.error:
+            sOut = '<not Read>'
+        logging.info(f'Read < {sOut}')
+        # print(f'iSckt< {sOut}')
+        return sOut
+
     def queryFloat(self, SCPI):
         rdStr = self.query(SCPI)
         return float(rdStr)
