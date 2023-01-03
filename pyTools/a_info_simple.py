@@ -19,7 +19,9 @@ s = socket.socket()                         # Create a socket object
 s.connect(('192.168.58.114', 5025))
 s.settimeout(1)                             # Timeout in seconds
 sQuery('*IDN?')
+
 s = socket.socket()                         # Create a socket object
 s.connect(('192.168.58.109', 5025))
 s.settimeout(1)                             # Timeout in seconds
 sQuery('*IDN?')
+
