@@ -13,6 +13,14 @@ class iSocket():
     def close(self):
         self.s.close()
 
+    def clear_error(self):
+        for i in range(10):
+            rdStr = self.query('SYST:ERR?')
+            print(rdStr)
+            errorCode = rdStr.split(',')[0]
+            if errorCode == '0':
+                break
+
     def delay(self, seconds):
         time.sleep(seconds)
 

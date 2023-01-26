@@ -1,5 +1,5 @@
 """ Rohde & Schwarz Automation for demonstration use."""
-from iSocket import iSocket                 # Import socket module
+from ..iSocket import iSocket
 
 SMW = iSocket().open('192.168.58.115', 5025)
 

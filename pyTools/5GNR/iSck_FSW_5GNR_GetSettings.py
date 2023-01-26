@@ -1,10 +1,6 @@
 """Rohde & Schwarz Automation for demonstration use. """
-
 from iSocket import iSocket                                         # Import socket module
 
-# ##############################################################################
-# ## Main Code
-# ##############################################################################
 def get_5GNR_settings():
     s = iSocket().open('192.168.58.109', 5025)
     freq = s.query(':SENS:FREQ:CENT?')                              # Center Frequency
@@ -16,7 +12,7 @@ def get_5GNR_settings():
     bwrb = s.query(f':CONF:NR5G:{ldir}:CC1:FRAM1:BWP0:RBC?')        # BWP RB Allocation
     cmod = s.query(f':CONF:NR5G:{ldir}:CC1:FRAM1:BWP0:SLOT0:ALL0:MOD?')  # channel Modulation
     tpre = s.query(f':CONF:NR5G:UL:CC1:TPR?')                       # Trans Precoding State
-    phas = s.query(f':CONF:NR5G:UL:CC1:RFUC:STAT?')                 # Phase comp state
+    phas = s.query(f':CONF:NR5G:{ldir}:CC1:RFUC:STAT?')             # Phase comp state
     time = s.query(':SENS:SWE:TIME?')                               # measure time
     nslt = s.query(':SENS:NR5G:FRAM:SLOT?')                         # number of slots
     s.close()

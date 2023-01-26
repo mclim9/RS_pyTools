@@ -1,6 +1,6 @@
 """ Rohde & Schwarz Automation for demonstration use."""
 import os
-import socket                               # Import socket module
+import socket
 
 def sQuery(SCPI):
     try:
@@ -11,16 +11,17 @@ def sQuery(SCPI):
     print(sOut)
     return sOut
 
-SMW_IP = '172.24.50.83'
-FSW_IP = '172.24.50.78'
-ProbNm = 'Issue1'
+SMW_IP = '192.168.58.114'
+FSW_IP = '192.168.58.109'
 
 s = socket.socket()
 s.connect((SMW_IP, 5025))
 s.settimeout(5)
 sQuery(f'*IDN?')
+os.system(f'start \\\\{SMW_IP}\\user')
 
 s = socket.socket()
 s.connect((FSW_IP, 5025))
 s.settimeout(5)
 sQuery(f'*IDN?')
+os.system(f'start \\\\{FSW_IP}\\instr')

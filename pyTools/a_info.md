@@ -7,3 +7,9 @@
 
 ## Pip install
 - python -m pip install <package>
+
+## Instrument
+2022.08.04 Rohde&Schwarz,SMW200A,1412.0000K02/110023,5.00.166.22
+2022.08.04 Rohde&Schwarz,FSW-50,1331.5003K50/101643,5.20-22.6.18.0 Beta
+2023.01.06 Rohde&Schwarz,SMW200A,1412.0000K02/110023,5.00.166.22
+2023.01.06 Rohde&Schwarz,FSW-50,1331.5003K50/101643,5.20-22.12.2.901 Beta (K147C)
