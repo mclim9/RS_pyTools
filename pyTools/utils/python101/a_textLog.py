@@ -11,9 +11,6 @@ class testLog():
     def write(self, outText):
         logging.info(f'{outText}')
 
-# #########################################################
-# ## Main Code
-# #########################################################
 if __name__ == "__main__":
     testr = testLog()
     testr.write('hello')

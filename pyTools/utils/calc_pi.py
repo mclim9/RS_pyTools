@@ -51,7 +51,7 @@ def factorial(x):
     else:
         return x * factorial(x - 1)
 
-
-GregoryLeibniz()
-nilakantha()
-ramanujan_pi()
+if __name__ == '__main__':
+    GregoryLeibniz()
+    nilakantha()
+    ramanujan_pi()

@@ -4,9 +4,9 @@ from iSocket import iSocket                 # Import socket module
 FSW = iSocket().open('192.168.58.109', 5025)
 SMW = iSocket().open('192.168.58.114', 5025)
 FSW.s.settimeout(1)
-dir = 'UL'  # UL | DL
+dir = 'DL'  # UL | DL
 if dir == 'DL':
-    allc = 1
+    allc = 0
     ch  = 'PDSC'
 else:
     allc = 0

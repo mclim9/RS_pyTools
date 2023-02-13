@@ -11,7 +11,10 @@ def get_5GNR_settings():
     bscs = s.query(f':CONF:NR5G:{ldir}:CC1:FRAM1:BWP0:SSP?')        # BWP Sub Carr Spacing
     bwrb = s.query(f':CONF:NR5G:{ldir}:CC1:FRAM1:BWP0:RBC?')        # BWP RB Allocation
     cmod = s.query(f':CONF:NR5G:{ldir}:CC1:FRAM1:BWP0:SLOT0:ALL0:MOD?')  # channel Modulation
-    tpre = s.query(f':CONF:NR5G:UL:CC1:TPR?')                       # Trans Precoding State
+    if ldir == 'UL':
+        tpre = s.query(f':CONF:NR5G:UL:CC1:TPR?')                       # Trans Precoding State
+    else:
+        tpre = 'NA'
     phas = s.query(f':CONF:NR5G:{ldir}:CC1:RFUC:STAT?')             # Phase comp state
     time = s.query(':SENS:SWE:TIME?')                               # measure time
     nslt = s.query(':SENS:NR5G:FRAM:SLOT?')                         # number of slots

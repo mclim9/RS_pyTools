@@ -32,8 +32,7 @@ def file_write(outString):
     fily.write(f'{outString}\n')
     fily.close()
 
-if __name__ == "__main__":
-    file_erase()
-    for i in range(10):
-        file_write(f'{i},{2 * i},{3 * i + 1}')
-    file_readCSV_key(0, '6')
+if __name__ == '__main__':
+    outlist = file_read()
+    for line in outlist:
+        print(line.replace(']', '\n'))
