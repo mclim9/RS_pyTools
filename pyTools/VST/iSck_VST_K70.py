@@ -11,12 +11,9 @@ def sWrite(SCPI):                           # Socket Write
     print(f'Write: {SCPI}')
     s.sendall(f'{SCPI}\n'.encode())         # Write SCPI
 
-# ##############################################################################
-# ## Main Code
-# ##############################################################################
 s = socket.socket()                         # Create a socket object
 
-# # VSG Setup
+# VSG Setup
 s.connect(('192.168.58.114', 5025))
 s.settimeout(1)                             # Timeout in seconds
 sWrite(f':SOUR1:BB:DM:SRAT 1234000')        # Data rate
@@ -29,7 +26,7 @@ sWrite(f'"SOUR1:IQ:STAT 1;*OPC?')           # IQ Mod
 sWrite(f':OUTP1:STAT 1;*OPC?')              # RF Output
 s.close()
 
-# ## VSA Setup
+# VSA Setup
 s.connect(('192.168.58.109', 5025))
 s.settimeout(1)                             # Timeout in seconds
 sWrite(f':INST:CRE:NEW DDEM, "VSA"')        # Create Vector demod Ch

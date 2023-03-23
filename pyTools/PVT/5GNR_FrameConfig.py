@@ -37,7 +37,7 @@ def SMW_config_5G():
 if __name__ == "__main__":
     pvt = PVT().open('192.168.58.30', 5025)
     pvt.s.settimeout(5)
-    SMW_config_5G()
-    SMW_config_5G_frame()
+    # SMW_config_5G()
+    # SMW_config_5G_frame()
     PVT_config_5G_frame()
     pvt.clear_error()

@@ -6,7 +6,7 @@ SMW = iSocket().open('192.168.58.114', 5025)
 FSW.s.settimeout(1)
 dir = 'DL'  # UL | DL
 if dir == 'DL':
-    allc = 0
+    allc = 1
     ch  = 'PDSC'
 else:
     allc = 0

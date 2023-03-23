@@ -21,7 +21,7 @@ def init_system():
         pvt.write(f'SOUR:GPRF:GEN1:ARB:FILE "@WAVEFORM/{wave}.wv"')
         pvt.query('ROUT:NRS:MEAS:SPAT "RF1.1";*OPC?')                                       # VSA Routing
         pvt.write(f'TRIG:NRS:MEAS:MEV:SOUR "GPRF Gen1: Restart Marker"')                    # VSA Trig
-        smw.query('OUTP1:STAT 0;*OPC?')
+        # smw.query('OUTP1:STAT 0;*OPC?')
     elif VSG == 'SMW':
         pvt.query('SOUR:GPRF:GEN1:STAT OFF;*OPC?')                                          # VSG OFF
         smw.query('OUTP1:STAT 1;*OPC?')
@@ -53,23 +53,26 @@ def meas_EVM():
 
 def main():
     global VSG
-    file_write('Instrument,Freq,Wave,Pwr,EVM_%,tx_power,EVM_dB')
+    file_write('Instrument,Freq,Wave,Pwr,EVM_%,tx_power,EVM_dB,EVM_time')
     for vsg in ['PVT']:
         VSG = vsg
         init_system()
-        for freq in [6.6e9, 6.7e9, 6.8e9, 6.9e9, 7.0e9]:
+        for freq in range(int(3.5e9), int(7.1e9), int(500e6)):
             set_freq(freq)
             for pwr in range(-50, 5, 1):
                 set_power(pwr)
+                pvt.tick()
                 evm = meas_EVM()
+                time = pvt.tock()
                 evm_per = float(evm.split(',')[0])
                 evm_db = 20 * log10(evm_per / 100)
-                outStr = f'{vsg}_2_{VSA}, {freq:.0f}, {wave}, {pwr}, {evm}, {evm_db:5.2f}'
+                outStr = f'{vsg}_2_{VSA}, {freq:.0f}, {wave}, {pwr:3d}, {evm}, {evm_db:5.2f}, {time:8.6f}'
                 file_write(outStr)
 
 
 if __name__ == "__main__":
     pvt = PVT().open('192.168.58.30', 5025)
-    smw = iSocket().open('192.168.58.114', 5025)
+    if VSG == 'SMW':
+        smw = iSocket().open('192.168.58.114', 5025)
     wave = 'FR1_UL_100MHz_30SCS_256QAM'
     main()

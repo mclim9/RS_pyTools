@@ -36,7 +36,7 @@ def set_freq(freq):
 
 
 def set_power(power):
-    pvt.write(f'CONF:WLAN:MEAS:RFS:ENP1 {power}')                      # PVT Meas RMS Pwr
+    pvt.write(f'CONF:WLAN:MEAS:RFS:ENP1 {power}')                       # PVT Meas RMS Pwr
     if VSG == 'PVT':
         pvt.query(f':SOUR:GPRF:GEN1:RFS:LEV {power};*OPC?')             # PVT Generator
     elif VSG == 'SMW':

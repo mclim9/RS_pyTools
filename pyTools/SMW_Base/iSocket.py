@@ -67,11 +67,10 @@ class iSocket():
         time.sleep(.001)
         try:
             sOut = self.s.recv(10000000).strip()    # Read socket
-            sOut = sOut.decode()
+            sOut = sOut.decode("utf-8", "ignore")
         except socket.error:
             sOut = '<not Read>'
         logging.info(f'Read < {sOut}')
-        # print(f'Read < {sOut}')
         return sOut
 
     def queryFloat(self, SCPI):
