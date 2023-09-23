@@ -20,11 +20,13 @@ file_write(FSW.idn)
 SMW = iSocket().open('192.168.58.114', 5025)
 file_write(SMW.idn)
 file_write(get_5GNR_settings())
-file_write('Mode,Freq,Power [dBm],RefLvl [dBm],Attn[dB],ChPwr[dBm],EVM[dB],Leveling,IQNC,Time[Sec]')
+file_write('Mode,Freq,Power [dBm],RefLvl [dBm],Attn[dB],ChPwr[dBm],EVM[dB],Leveling,IQNC,Slot,CapTime,Time[Sec]')
 
 FSW.write('INIT:CONT OFF')                                          # Single Sweep
 FSW.write(':SENS:NR5G:FRAM:COUN:AUTO OFF')                          # Frame count off
 FSW.write(':SENS:NR5G:FRAM:COUN 1')                                 # Single frame
+capTime = FSW.queryFloat(':SENS:SWE:TIME?')
+slots = FSW.queryInt(':SENSE:NR5G:FRAM:SLOT?')
 # FSW.write(':SENS:NR5G:RSUM:CCR ALL')                              # CA View all CC results
 for mode in ['LEV']:                                                # LEV:autolevel EVM:autoEVM
     for freq in freq_arry:
@@ -32,7 +34,7 @@ for mode in ['LEV']:                                                # LEV:autole
         FSW.write(f':SENSE:FREQ:CENT {freq}')                       # CW Center Freq
         SMW.write(f':SOUR1:FREQ:CW {freq}')                         # SMW center freq
         for pwr in pwr_arry:
-            for iqnc in [1, 2, 5, 10, 20, 30, 50]:
+            for iqnc in [2, 5, 10, 20, 30, 50]:
                 SMW.write(f':SOUR1:POW:POW {pwr}')                      # SMW Power
                 FSW.query(f':SENS:ADJ:{mode};*OPC?')                    # AutoEVM or Level
                 FSW.write(f':SENS:ADJ:NCAN:AVER:COUN {iqnc}')           # Set IQ NC Averages
@@ -40,13 +42,14 @@ for mode in ['LEV']:                                                # LEV:autole
                 FSW.tick()
                 FSW.query('INIT:IMM;*OPC?')
                 time = FSW.tock()
+                iqca = FSW.queryInt(f':SENS:ADJ:NCAN:AVER:COUN?')       # Set IQ NC Averages
                 EVM = FSW.queryFloat(':FETC:CC1:SUMM:EVM:ALL:AVER?')    # FSW CW
                 # EVM = FSW.queryFloat(':FETC:ALL:SUMM:EVM:PCH?')       # FSW CC
                 # EVM = FSW.query(':FETC:CC1:ISRC:FRAM:SUMM:EVM:ALL?')  # FSVA
                 attn = FSW.query('INP:ATT?')                            # Input Attn
-                refl = FSW.query('DISP:TRAC:Y:SCAL:RLEV?')
+                refl = FSW.queryFloat('DISP:TRAC:Y:SCAL:RLEV?')
                 chPw = FSW.queryFloat(':FETC:CC1:ISRC:FRAM:SUMM:POW?')  # FSW CW Ch Pwr
                 # chPw = FSW.queryFloat(':FETC:ALL:SUMM:POW?')          # FSW CA Ch Pwr
 
-                data = f'{mode},{freq},{pwr},{refl},{attn},{chPw:6.2f},{EVM:6.2f},{mode},{iqnc},{time}'
+                data = f'{mode},{freq},{pwr},{refl:6.2f},{attn},{chPw:6.2f},{EVM:6.2f},{mode},{iqnc:2d},{slots:2d},{capTime},{time:6.3f}'
                 file_write(data)

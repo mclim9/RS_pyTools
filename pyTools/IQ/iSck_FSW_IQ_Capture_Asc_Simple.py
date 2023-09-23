@@ -21,7 +21,7 @@ sWrite('TRAC:IQ:DATA:FORM IQP')             # IQ Pairs
 rdStr = sQuery(f'TRAC:IQ:DATA:MEM?').strip()
 IQPoints = [float(value) for value in rdStr.split(',')]
 
-numIQ = int(len(IQPoints) / 2)                     # 4 bytes I + 4 bytes Q
+numIQ = int(len(IQPoints) / 2)              # 4 bytes I + 4 bytes Q
 print(f'{numIQ} IQ Points')
 
 for i in range(numIQ):

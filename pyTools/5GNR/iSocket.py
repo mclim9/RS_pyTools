@@ -1,6 +1,7 @@
 """Rohde & Schwarz instrument socket for demonstration use."""
 import logging
 import socket
+import timeit
 import time
 import os
 
@@ -48,6 +49,13 @@ class iSocket():
             time.sleep(0.5)
             # if time.delta > 300:           # Timeout
             #     break
+
+    def tick(self):
+        self.ticks = timeit.default_timer()
+
+    def tock(self):
+        self.tocks = timeit.default_timer() - self.ticks
+        return self.tocks
 
     def write(self, SCPI):                          # noqa: E302
         """Socket Write"""

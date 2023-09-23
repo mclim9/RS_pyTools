@@ -1,11 +1,16 @@
 """ Rohde & Schwarz Automation for demonstration use."""
+# Before use:   Configure FSW/SMW
+#               EVM should be displayed on EVM screen
+#               FSW EVM is triggered measurement
+#               Below code intended for FExxx
+
 from iSocket import iSocket
 import timeit
 oldEVM = 0
 
 def get_Settings():
+    s.write('UNIT:EVM DB')
     tick = timeit.default_timer()
-    freq = 0
     freq = s.queryFloat(':SENS:FREQ:CENT?') / 1e9       # Center Frequency (50mSec)
     tick = timeit.default_timer()
     freq = s.queryFloat(':SENS:FREQ:CENT?') / 1e9       # Center Frequency (130mSec)
@@ -21,12 +26,13 @@ def get_Settings():
 def Get_EVM_Stat():
     global oldEVM
     s.query('INIT:IMM;*OPC?')
-    newEVM = float(s.query(':FETC:CC1:ISRC:FRAM:SUMM:EVM:ALL:AVER?'))      # 5GNR
+    newEVM = float(s.query(':FETC:CC1:ISRC:FRAM:SUMM:EVM:ALL:AVER?'))      # 5GNR 1CC EVM
     delta = oldEVM - newEVM
     oldEVM = newEVM
     return delta
 
 def shift_RefLvl(delta):
+    s.query('INIT:IMM;*OPC?')                                   # Update screen
     refl = s.query('DISP:TRAC:Y:SCAL:RLEV?')                    # Set Ref Level
     refl = float(refl)
     s.write(f':DISP:TRAC:Y:SCAL:RLEV {refl + delta}')
@@ -48,7 +54,7 @@ def optimize_FrontEnd():
 
     end_attn_delta = -1
     while Get_EVM_Stat() > 0:
-        shift_attn(2)
+        shift_attn(3)
         if (get_Settings()[2] == 0):                            # Break if Attn=0
             end_attn_delta = 0
             break

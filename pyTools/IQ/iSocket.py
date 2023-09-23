@@ -43,12 +43,12 @@ class iSocket():
 
     def write(self, SCPI):
         """Socket Write"""
-        logging.info(f'Write> {SCPI.strip()}')
+        # logging.info(f'Write> {SCPI.strip()}')
         self.s.sendall(f'{SCPI}\n'.encode())        # Write 'SCPI'
 
     def writeBin(self, SCPI):
         """Socket Write"""
-        logging.info(f'Write> {SCPI.strip()}')
+        # logging.info(f'Write> {SCPI.strip()}')
         self.s.sendall(SCPI + bytes([10]))          # Write 'SCPI'
 
     def query(self, SCPI):
@@ -62,7 +62,7 @@ class iSocket():
             sOut = sOut.decode()
         except socket.error:
             sOut = '<not Read>'
-        logging.info(f'Read < {sOut}')
+        # logging.info(f'Read < {sOut}')
         # print(f'iSckt< {sOut}')
         return sOut
 
@@ -73,7 +73,7 @@ class iSocket():
         return int(self.query(SCPI))
 
     def read(self):
-        n = 10000000
+        n = 10000000000
         try:
             sOut = bytearray()
             while len(sOut) < n:
@@ -109,11 +109,11 @@ class iSocket():
                     self.write(cmd)
                 error = self.query('SYST:ERR?')
                 outStr = f'{error.strip()} {cmd.strip()}'
-                logging.info(outStr)
+                # logging.info(outStr)
             except socket.timeout:
                 error = 'SCPI TIMEOUT' + self.query('SYST:ERR?')
                 outStr = f'{error.strip()} {cmd.strip()}'
-                logging.error(outStr)
+                # logging.error(outStr)
 
     def timeout(self, seconds):
         self.s.settimeout(seconds)

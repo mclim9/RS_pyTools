@@ -12,8 +12,9 @@ def sWrite(SCPI):                           # Socket Write
     s.sendall(f'{SCPI}\n'.encode())
 
 s = socket.socket()
-s.connect(('192.168.58.115', 5025))
+s.connect(('192.168.58.114', 5025))
 s.settimeout(5)
 
-print(sQuery('*IDN?'))
-print(sQuery('*OPT?'))
+sQuery('*IDN?')
+sQuery('*OPT?')
+sQuery('SYST:DFPR?')

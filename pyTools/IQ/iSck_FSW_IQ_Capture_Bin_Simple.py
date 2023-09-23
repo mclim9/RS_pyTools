@@ -15,7 +15,6 @@ s = socket.socket()                         # Create a socket object
 s.connect(('192.168.58.109', 5025))
 s.settimeout(10)                            # Timeout in seconds
 
-# sWrite('FORM:DATA ASCII')                 # Ascii data
 sWrite('FORM:DATA REAL,32')                 # Binary Data
 sWrite('TRAC:IQ:DATA:FORM IQP')             # IQ Pairs
 rdStr = sQuery(f'TRAC:IQ:DATA:MEM?')        # Retrieve Data

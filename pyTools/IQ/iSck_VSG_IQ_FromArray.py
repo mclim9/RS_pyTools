@@ -24,6 +24,10 @@ clock = 122.88e6                                                # Sampling Rate
 # IData = [0.1, 0.2, 0.3]
 # QData = [0.4, 0.5, 0.6]
 
+for i in range(10):
+    IData += IData
+    QData += QData
+
 # ## ASCII
 scpi  = f':MMEM:DATA:UNPR "NVWFM://var//user//{fileName}.wv",#' # Ascii Cmd
 numBytes = str(len(IData) * 4)                                  # Calculate bytes of IQ data
@@ -33,9 +37,9 @@ iqdata = np.vstack((IData, QData)).reshape((-1,), order='F')    # Interleave I &
 iqdata = iqdata * 32767                                         # scale to 7bit number
 bits  = np.array(iqdata, dtype='>i2')                           # Convert to big-endian 2byte int
 # ## ASCII + Binary
-cmd   = bytes(scpi, 'utf-8') + bits.tostring()                  # Add ASCII + Bin
+cmd   = bytes(scpi, 'utf-8') + bits.tobytes()                   # Add ASCII + Bin
 
-K2 = iSocket().open('192.168.58.115', 5025)
+K2 = iSocket().open('192.168.58.114', 5025)
 tick = timeit.default_timer()
 K2.writeBin(cmd)
 K2.write(f'SOUR1:BB:ARB:WAV:CLOC "/var/user/{fileName}.wv",{clock}') # Set Fs/Clk Rate
