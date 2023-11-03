@@ -1,20 +1,20 @@
 """ Rohde & Schwarz Automation for demonstration use."""
 import socket
 
-def sQuery(SCPI):                           # Socket Query
-    sWrite(SCPI)
-    sOut = s.recv(100000).decode().strip()
-    print(f'Query: {sOut}')
-    return sOut
-
 def sWrite(SCPI):                           # Socket Write
-    print(f'Write: {SCPI}')
-    s.sendall(f'{SCPI}\n'.encode())
+    print(f'Write: {SCPI}')                 # Print SCPI to screen
+    s.sendall(f'{SCPI}\n'.encode())         # Send SCPI to socket
 
-s = socket.socket()
-s.connect(('192.168.58.114', 5025))
-s.settimeout(5)
+def sQuery(SCPI):                           # Socket Query
+    sWrite(SCPI)                            # Write SCPI
+    sOut = s.recv(100000).decode().strip()  # Read SCPI from socket
+    print(f'Query: {sOut}')                 # Print Read to screen
+    return sOut                             # Return value
 
-sQuery('*IDN?')
-sQuery('*OPT?')
-sQuery('SYST:DFPR?')
+s = socket.socket()                         # Create Socket
+s.connect(('192.168.58.114', 5025))         # IP Address of socket
+s.settimeout(5)                             # Timeout
+
+sQuery('*IDN?')                             # Instrument Identification String
+sQuery('*OPT?')                             # Query options
+sQuery('SYST:DFPR?')                        # Instrument XML description

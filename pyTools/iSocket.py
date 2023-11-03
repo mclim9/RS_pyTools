@@ -23,10 +23,20 @@ class iSocket():
     def delay(self, seconds):
         time.sleep(seconds)
 
+    def logging_test(self, log_file):
+        handler = logging.FileHandler(log_file)
+        handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
+
+        logger = logging.getLogger('asdf')
+        logger.setLevel(logging.INFO)
+        logger.addHandler(handler)
+
+        return logger
+
     def opc(self, SCPI):
         self.write("*ESE 1")                    # Event Status Enable
         self.write("*SRE 32")                   # SRE Def: Bit5:Std Event
-        self.write("INIT:IMM;*OPC")             # *OPC will trigger ESR
+        self.write(f"{SCPI};*OPC")              # *OPC will trigger ESR
         read = 0
         while (read & 1) != 1:                  # Loop until done
             read = self.queryInt("*ESR?")       # Poll ESB
@@ -37,7 +47,7 @@ class iSocket():
     def open(self, host, port):
         """connect instrument socket"""
         try:
-            logging.basicConfig(level=logging.INFO,
+            logging.basicConfig(level=logging.DEBUG,
                                 filename=__file__.split('.')[0] + '.log', filemode='a',         # noqa:
                                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')  # noqa:
             self.s.connect((host, port))
@@ -90,8 +100,9 @@ class iSocket():
     def tick(self):
         self.ticks = timeit.default_timer()
 
-    def tock(self):
+    def tock(self, comment=''):
         self.tocks = timeit.default_timer() - self.ticks
+        # print(f'Time : {self.tocks:7.3f}secs {comment}')
         return self.tocks
 
     def timeout(self, seconds):
