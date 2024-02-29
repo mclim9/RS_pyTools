@@ -2,7 +2,8 @@
 import socket
 
 s = socket.socket()
-s.connect(('192.168.58.114', 5025))
+# s.connect(('192.168.58.114', 5025))
+s.connect(('172.24.225.105', 5025))
 s.settimeout(5)
 
 SCPI = '*IDN?'

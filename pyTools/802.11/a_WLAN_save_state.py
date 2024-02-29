@@ -13,6 +13,8 @@ def sQuery(SCPI):
 
 SMW_IP = '192.168.58.114'
 FSW_IP = '192.168.58.109'
+SMW_IP = '172.24.225.120'
+FSW_IP = '172.24.225.105'
 
 s = socket.socket()
 s.connect((SMW_IP, 5025))

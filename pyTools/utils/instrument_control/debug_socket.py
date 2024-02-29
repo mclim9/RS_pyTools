@@ -12,7 +12,7 @@ def sQuery(SCPI):                           # Socket Query
     return sOut                             # Return value
 
 s = socket.socket()                         # Create Socket
-s.connect(('192.168.58.114', 5025))         # IP Address of socket
+s.connect(('192.168.58.115', 5025))         # IP Address of socket
 s.settimeout(5)                             # Timeout
 
 sQuery('*IDN?')                             # Instrument Identification String
