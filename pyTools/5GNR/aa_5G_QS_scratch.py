@@ -1,7 +1,10 @@
 from iSocket import iSocket                             # Import socket module
 
-FSW = iSocket().open('192.168.58.109', 5025)
-SMW = iSocket().open('192.168.58.114', 5025)
+# FSW = iSocket().open('192.168.58.109', 5025)
+# SMW = iSocket().open('192.168.58.114', 5025)
+SMW_IP = '172.24.225.130'
+FSW = iSocket().open('172.24.225.128', 5025)
+SMW = iSocket().open(SMW_IP, 5025)
 SMW.timeout(5)                                          # Timeout in seconds
 
 def VSG_NR5G_Quickset():
@@ -12,7 +15,7 @@ def VSG_NR5G_Quickset():
     SMW.write(':SOUR1:BB:NR5G:QCKS:GEN:CBW BW100')      # QS RFBW
     SMW.write(':SOUR1:BB:NR5G:QCKS:GEN:SCSP SCS30')     # QS SCS
     SMW.write(':SOUR1:BB:NR5G:QCKS:GEN:ES:RBN 273')     # QS RB
-    SMW.write(':SOUR1:BB:NR5G:QCKS:GEN:ES:MOD QAM64')    # QS Mod: QPSK; QAM64; QAM256
+    SMW.write(':SOUR1:BB:NR5G:QCKS:GEN:ES:MOD QAM64')   # QS Mod: QPSK; QAM64; QAM256
     SMW.query(':SOUR1:BB:NR5G:QCKS:APPL;*OPC?')         # QS Apply
     SMW.query(':SOUR1:BB:NR5G:NODE:RFPH:MODE 0')        # Phase Comp Off
     SMW.write(':SOUR1:BB:NR5G:TRIG:OUTP1:MODE REST')    # Arb Marker Restart
@@ -30,7 +33,7 @@ def VSA_NR5G_Config():
     VSA_Ch_Select('NR5G', '5G NR')                      # Select 5GNR
     FSW.write(':INIT:CONT OFF')                         # Single  Sweep
     FSW.query(':SENS:ADJ:LEV;*OPC?')                    # Autolevel
-    FSW.write(':CONF:GEN:IPC:ADDR "192.168.58.114"')    # VSG IP Addr
+    FSW.write(f':CONF:GEN:IPC:ADDR "{SMW_IP}"')         # VSG IP Addr
     FSW.opc(':CONF:GEN:CONN:STAT ON')                   # Connect VSG
     FSW.write(':CONF:GEN:CONT:STAT ON')                 # VSG Control
     FSW.write(':CONF:GEN:RFO:STAT ON')                  # VSG RF
