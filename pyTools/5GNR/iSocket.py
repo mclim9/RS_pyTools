@@ -121,5 +121,8 @@ class iSocket():
 
 if __name__ == "__main__":
     instr = iSocket().open('192.168.58.109', 5025)
+    instr.write(set_freq)
+    instr.write(set_attn)
+    instr.write(set_ref_level)
     instr.opc('INIT:IMM')
     print(instr.query('*IDN?'))

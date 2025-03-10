@@ -1,5 +1,6 @@
 """ Rohde & Schwarz Automation for demonstration use."""
 import pyvisa as visa
+import timeit
 
 def vQuery(SCPI):                           # Socket Query
     vWrite(SCPI)
@@ -11,12 +12,17 @@ def vWrite(SCPI):                           # Socket Write
     print(f'Write: {SCPI}')
     instr.write(SCPI)
 
-rm = visa.ResourceManager()
-instr = rm.open_resource(f'TCPIP0::192.168.58.115::inst0::INSTR')
-# s.settimeout(5)
 
+rm = visa.ResourceManager()
+instr = rm.open_resource(f'TCPIP0::172.24.64.220::inst0::INSTR')
+# instr = rm.open_resource(f'TCPIP0::172.24.64.220::hislip0::INSTR')
+
+tick = timeit.default_timer()
 vQuery(f'*IDN?')
-vQuery(f'*OPT?')
+# vQuery(f'*OPT?')
+print(f'TTime: {timeit.default_timer() - tick:.6f} sec')
+
+
 
 # HISLP: TCPIP0::192.168.1.100::hislip0::INSTR
 # VXI11: TCPIP0::192.168.1.100::inst0::INSTR

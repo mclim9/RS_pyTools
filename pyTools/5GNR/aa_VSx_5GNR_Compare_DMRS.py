@@ -1,10 +1,10 @@
 """ Rohde & Schwarz Automation for demonstration use."""
 from iSocket import iSocket                 # Import socket module
 
-FSW = iSocket().open('192.168.58.109', 5025)
-SMW = iSocket().open('192.168.58.114', 5025)
+FSW = iSocket().open('172.24.225.101', 5025)
+SMW = iSocket().open('SMW200A-120095', 5025)
 FSW.s.settimeout(1)
-dir = 'DL'  # UL | DL
+dir = 'UL'  # UL | DL
 if dir == 'DL':
     allc = 1
     ch  = 'PDSC'
@@ -31,6 +31,7 @@ FSW_dmrsLen = FSW.query(f':CONF:NR5G:{dir}:CC1:FRAM1:BWP0:SLOT0:ALL0:DMRS:MSYM:L
 FSW_relPowr = FSW.query(f':CONF:NR5G:{dir}:CC1:FRAM1:BWP0:SLOT0:ALL0:DMRS:POW?')
 FSW_MMLayer = FSW.query(f':CONF:NR5G:{dir}:CC1:FRAM1:BWP0:SLOT0:ALL0:CLM?')
 FSW_cdmGrup = FSW.query(f':CONF:NR5G:{dir}:CC1:FRAM1:BWP0:SLOT0:ALL0:DMRS:CGWD?')
+FSW_Tprecod = FSW.query(f':CONF:NR5G:{dir}:CC1:TPR?')
 
 SMW_FreqBnd = SMW.query(f':SOUR1:BB:NR5G:NODE:CELL0:CARD?')
 SMW_ChanBnd = SMW.query(f':SOUR1:BB:NR5G:NODE:CELL0:CBW?')
@@ -46,10 +47,12 @@ SMW_configT = SMW.query(f':SOUR1:BB:NR5G:UBWP:USER0:CELL0:{dir}:BWP0:{ch}:DMTA:C
 SMW_MapType = SMW.query(f':SOUR1:BB:NR5G:SCH:CELL0:SUBF0:USER0:BWP0:ALL0:MAPT?')
 SMW_1stAPos = SMW.query(f':SOUR1:BB:NR5G:NODE:CELL0:TAP?')
 SMW_addPosi = SMW.query(f':SOUR1:BB:NR5G:UBWP:USER0:CELL0:{dir}:BWP0:{ch}:DMTA:APIN?')
-SMW_dmrsLen = SMW.query(f':SOUR1:BB:NR5G:UBWP:USER0:CELL0:{dir}:BWP0:{ch}:DMTA:MLEN?')
+# SMW_dmrsLen = SMW.query(f':SOUR1:BB:NR5G:UBWP:USER0:CELL0:{dir}:BWP0:{ch}:DMTA:MLEN?')
+SMW_dmrsLen = SMW.query(f':SOUR1:BB:NR5G:SCH:CELL0:SUBF0:USER0:BWP0:ALL0:{ch}:DMRS:LENG?')
 SMW_relPowr = SMW.query(f':SOUR1:BB:NR5G:SCH:CELL0:SUBF0:USER0:BWP0:ALL0:{ch}:DMRS:POW?')
 SMW_MMLayer = SMW.query(f':SOUR1:BB:NR5G:SCH:CELL0:SUBF0:USER0:BWP0:ALL0:{ch}:TXSC:NLAY?')
 SMW_cdmGrup = SMW.query(f':SOUR1:BB:NR5G:SCH:CELL0:SUBF0:USER0:BWP0:ALL0:{ch}:TXSC:CDMD?')
+SMW_Tprecod = SMW.query(f':SOUR1:BB:NR5G:UBWP:USER0:CELL0:{dir}:BWP0:{ch}:TPST?')
 
 
 print(f'Freq Range :  FSW , SMW ')
@@ -72,3 +75,4 @@ print(f'Rel Power  : {FSW_relPowr:^5},{SMW_relPowr:^5}')
 print(f'-----------: -----,-----')
 print(f'MIMO Layers: {FSW_MMLayer:^5},{SMW_MMLayer:^5}')
 print(f'CDM Group  : {FSW_cdmGrup:^5},{SMW_cdmGrup:^5}')
+print(f'dFt-s-ofdm : {FSW_Tprecod:^5},{SMW_Tprecod:^5}')

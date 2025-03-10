@@ -10,10 +10,10 @@ df = pd.read_csv(f, header=0, skiprows=3, sep=',')
 print(f'Cols: {list(df.columns)}')                  # Col names
 
 # ## Filter Data
-df = df[df['Mode'].str.contains('EVM')]             # filter data
+# df = df[df['Mode'].str.contains('EVM')]             # filter data
 
 # ## Define Pivot Table
-Yval = ['EVM [dB]']                                 # Y Values
+Yval = ['EVM[dB]']                                 # Y Values
 Xval = ['Power [dBm]']                              # X Values
 Cols = ['Freq', 'Mode']                             # Split value
 aggg = 'mean'                                       # mean | sum
@@ -30,7 +30,7 @@ plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=2)
 plt.tight_layout(pad=2)
 plt.grid()
 plt.title(f'{Yval} {aggg}')
-plt.axis([-50, 10, -40, -20])                     # X, Y
+# plt.axis([-50, 10, -40, -20])                     # X, Y
 plt.xlabel(Xval)
 plt.ylabel(Yval)
 

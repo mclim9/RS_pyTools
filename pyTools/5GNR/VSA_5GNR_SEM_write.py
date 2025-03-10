@@ -34,7 +34,7 @@ def config_SEM(freq, BW):
         s.write(f':SENS:ESP1:RANG9:FREQ:STOP {-SEM_lower}') # Range8 Stop (throw away)
 
 if __name__ == "__main__":
-    s = iSocket().open('192.168.58.109', 5025)
+    s = iSocket().open('172.24.225.128', 5025)
     # config_SEM(3500e6, 100)
     config_SEM(3550e6, 100)
     s.clear_error()
